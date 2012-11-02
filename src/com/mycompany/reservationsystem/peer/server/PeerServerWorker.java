@@ -41,15 +41,17 @@ public class PeerServerWorker extends Thread{
 	public void run(){
 		PeerTable peerTable = PeerTable.getInstance();
 		peerList = peerTable.getAllPeers();
+		
 		try{
 			out = new ObjectOutputStream(connection.getOutputStream());
 			out.flush();
 			in = new ObjectInputStream(connection.getInputStream());
 			
 			String message = null;
-			message = (String)in.readObject();
 			
 			while(isFinished() == false){
+				message = (String)in.readObject();
+				
 				if(nextIPIndex+1 >= peerList.size()){
 					setFinished(true);
 				}
