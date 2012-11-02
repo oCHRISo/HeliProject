@@ -35,7 +35,6 @@ public class PeerStateDeamon extends Thread{
 				try 
 				{
 					if(InetAddress.getByName(peer.getPeerIpAddress().trim()).isReachable(timeout)){
-						System.out.println("Can " + peer.getPeerIpAddress());
 						peerTable.connect();
 						peer.setState(Peer.STATE.ACTIVE);
 						peer.setEpochTime(new Date().getTime());
