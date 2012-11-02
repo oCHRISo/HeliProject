@@ -1,5 +1,6 @@
 package com.mycompany.reservationsystem.peer.data;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class PeerTable extends Database {
 	private static PeerTable instance = null;
@@ -62,5 +63,33 @@ public class PeerTable extends Database {
         e.printStackTrace();
         }
     	return null;
-    }   
+    }
+    
+    public synchronized ArrayList<Peer> findPeersByState(Peer.STATE state){
+    	try {    		
+    		resultSet = statement.executeQuery("SELECT * FROM Peers WHERE active='" + state.toString() + "'");
+    		
+    		ArrayList<Peer> listOfPeers = new ArrayList<Peer>();
+    		
+    		while(resultSet.next()){
+    			Peer peer = new Peer();
+        		peer.setPeerIpAddress(resultSet.getString("peer_address"));
+        		
+        		if(resultSet.getString("active").equals(Peer.STATE.ACTIVE.toString()))
+        		{
+        			peer.setState(Peer.STATE.ACTIVE);
+        		}
+        		else{
+        			peer.setState(Peer.STATE.INACTIVE);
+        		}
+        		peer.setEpochTime(resultSet.getLong("last_updated"));
+        		listOfPeers.add(peer);
+    		}
+    		return listOfPeers;
+    	}
+    	catch (Exception e) {  
+        e.printStackTrace();
+        }
+    	return null;
+    }
 }

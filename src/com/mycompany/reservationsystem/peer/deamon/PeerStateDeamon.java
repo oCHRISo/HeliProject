@@ -1,5 +1,12 @@
 package com.mycompany.reservationsystem.peer.deamon;
 
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Date;
+
+import com.mycompany.reservationsystem.peer.data.Peer;
+import com.mycompany.reservationsystem.peer.data.PeerTable;
+
 /*
  * Thread to maintain peer states
 
@@ -15,11 +22,38 @@ package com.mycompany.reservationsystem.peer.deamon;
     End
  */
 public class PeerStateDeamon extends Thread{
-	public PeerStateDeamon(){
-		
-	}
-	
+	private final int timeout = 1500;
 	public void run(){
-		
+		while(true){
+			PeerTable peerTable = PeerTable.getInstance();
+			
+			peerTable.connect();
+			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.INACTIVE);
+			peerTable.disconnect();
+			
+			for(Peer peer : peersByState){
+				try 
+				{
+					if(InetAddress.getByName(peer.getPeerIpAddress().trim()).isReachable(timeout)){
+						System.out.println("Can " + peer.getPeerIpAddress());
+						peerTable.connect();
+						peer.setState(Peer.STATE.ACTIVE);
+						peer.setEpochTime(new Date().getTime());
+						peerTable.updatePeer(peer);
+						peerTable.disconnect();
+					}
+				} 
+				catch (Exception e) {
+					e.printStackTrace();
+				} 
+			}
+			//Deamon sleep for 1 second
+			try {
+				Thread.sleep(1000);
+			} 
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
