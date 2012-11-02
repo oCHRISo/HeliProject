@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 /*
- * Server thread giving known ip address to clients
+ * Peer server thread giving known ip address to clients
 
     Begin
     Wait for client to connect
