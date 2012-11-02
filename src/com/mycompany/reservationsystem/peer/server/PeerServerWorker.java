@@ -4,23 +4,43 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import com.mycompany.reservationsystem.peer.communication.COMMUNICATION_MESSAGES;
+import com.mycompany.reservationsystem.peer.data.Peer;
+import com.mycompany.reservationsystem.peer.data.PeerTable;
 
+/*
+ * Server thread giving known ip address to clients
+
+    Begin
+    Wait for client to connect
+    Client requests for an ip
+    Find all known ip addresses at given point in time
+    Send an ip address to client
+    Wait for client to ask for another
+    Repeat step 5 and 6 until given all ip addresses
+    When all ips are given send blank message
+    Client then disconnects
+    End
+ */
 public class PeerServerWorker extends Thread{
 	private Socket connection;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private boolean isFinished;
+	private ArrayList<Peer> peerList;
+	private int nextIPIndex = 0;
 	
 	public PeerServerWorker(Socket socket){
 		this.connection = socket;
 		this.isFinished = false;
+		peerList = new ArrayList<Peer>();
 	}
 
 	public void run(){
-		
-		
+		PeerTable peerTable = PeerTable.getInstance();
+		peerList = peerTable.getAllPeers();
 		try{
 			out = new ObjectOutputStream(connection.getOutputStream());
 			out.flush();
@@ -28,12 +48,16 @@ public class PeerServerWorker extends Thread{
 			
 			String message = null;
 			message = (String)in.readObject();
-			System.out.println(message);
 			
 			while(isFinished() == false){
-				if(message.equals(COMMUNICATION_MESSAGES.IP_REQUEST.toString())){
+				if(nextIPIndex+1 >= peerList.size()){
+					setFinished(true);
+				}
+				
+				if(message.equals(COMMUNICATION_MESSAGES.IP_REQUEST.toString()) && isFinished() == false){
 					sendMessage(COMMUNICATION_MESSAGES.IP_RESPONSE);
 				}
+				nextIPIndex++;
 			}
 		}
 		catch (IOException e) {
@@ -59,8 +83,7 @@ public class PeerServerWorker extends Thread{
 	private void sendMessage(COMMUNICATION_MESSAGES communicationMessage){
 		if(communicationMessage.equals(COMMUNICATION_MESSAGES.IP_RESPONSE)){
 			String message = "";
-			message += COMMUNICATION_MESSAGES.IP_RESPONSE.toString() + ":" + ;
-			System.out.println(message);
+			message += COMMUNICATION_MESSAGES.IP_RESPONSE.toString() + ":" + peerList.get(nextIPIndex);
 			
 			try{
 				out.writeObject(message);
@@ -69,9 +92,6 @@ public class PeerServerWorker extends Thread{
 			catch(IOException ioException){
 				ioException.printStackTrace();
 			}
-		}
-		else if(communicationMessage.equals(COMMUNICATION_MESSAGES.IP_RESPONSE)){
-			
 		}
 	}
 	

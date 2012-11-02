@@ -92,4 +92,32 @@ public class PeerTable extends Database {
         }
     	return null;
     }
+    
+    public synchronized ArrayList<Peer> getAllPeers(){
+    	try {    		
+    		resultSet = statement.executeQuery("SELECT * FROM Peers");
+    		
+    		ArrayList<Peer> listOfPeers = new ArrayList<Peer>();
+    		
+    		while(resultSet.next()){
+    			Peer peer = new Peer();
+        		peer.setPeerIpAddress(resultSet.getString("peer_address"));
+        		
+        		if(resultSet.getString("active").equals(Peer.STATE.ACTIVE.toString()))
+        		{
+        			peer.setState(Peer.STATE.ACTIVE);
+        		}
+        		else{
+        			peer.setState(Peer.STATE.INACTIVE);
+        		}
+        		peer.setEpochTime(resultSet.getLong("last_updated"));
+        		listOfPeers.add(peer);
+    		}
+    		return listOfPeers;
+    	}
+    	catch (Exception e) {  
+        e.printStackTrace();
+        }
+    	return null;
+    }
 }

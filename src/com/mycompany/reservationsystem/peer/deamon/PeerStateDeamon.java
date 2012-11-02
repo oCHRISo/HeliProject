@@ -23,6 +23,7 @@ import com.mycompany.reservationsystem.peer.data.PeerTable;
  */
 public class PeerStateDeamon extends Thread{
 	private final int timeout = 1500;
+	
 	public void run(){
 		while(true){
 			PeerTable peerTable = PeerTable.getInstance();
