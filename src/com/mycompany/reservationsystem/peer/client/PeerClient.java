@@ -1,20 +1,29 @@
 package com.mycompany.reservationsystem.peer.client;
 
+import java.util.ArrayList;
+
+import com.mycompany.reservationsystem.peer.data.Peer;
+import com.mycompany.reservationsystem.peer.data.PeerTable;
+
 /*
- * Peer client thread getting ip addresses from peer server
+ * Peer client spawns all peer worker threads that connect to many servers
 
     Begin
-    Connect to the server
-    Request an ip address
-    Read response and check if ip address is known or unknown
-        if ip address is unknown
-        then connect to the DB and add the ip address with inactive state with epoch time
-    Repeat steps 3 and 4 until the server sends a blank ip address
+    Connect to DB
+    Find all peers that are in an active state
+    For each peer
+        Spawn a client worker thread
     End
  */
-public class PeerClient extends Thread {
-
+public class PeerClient extends Thread{
 	public void run(){
+		PeerTable peerTable = PeerTable.getInstance();
+		peerTable.connect();
+		ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
+		peerTable.disconnect();
 		
+		for(Peer peer : peersByState){
+			new Thread(new PeerClientWorker(peer.getPeerIpAddress())).start();
+		}
 	}
 }
