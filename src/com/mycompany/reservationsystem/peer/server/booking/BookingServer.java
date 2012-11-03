@@ -15,7 +15,9 @@ public class BookingServer extends Thread{
 				serverSocket = new ServerSocket(PORT_NUMBER);
 				Socket connection = serverSocket.accept();
 				//Spawn new thread for client
-				new Thread(new BookingServerWorker(connection)).start();
+				BookingServerWorker bookingWorker = new BookingServerWorker(connection);
+				bookingWorker.setPriority(MAX_PRIORITY);
+				new Thread(bookingWorker).start();
 			} 
 			catch (IOException e) {
 				e.printStackTrace();

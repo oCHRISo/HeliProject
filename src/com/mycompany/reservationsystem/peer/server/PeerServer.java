@@ -29,7 +29,9 @@ public class PeerServer extends Thread {
 				serverSocket = new ServerSocket(PORT_NUMBER);
 				Socket connection = serverSocket.accept();
 				//Spawn new thread for client
-				new Thread(new PeerServerWorker(connection)).start();
+				PeerServerWorker peerWorker = new PeerServerWorker(connection);
+				peerWorker.setPriority(MAX_PRIORITY);
+				new Thread(peerWorker).start();
 			} 
 			catch (IOException e) {
 				e.printStackTrace();

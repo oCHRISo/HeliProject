@@ -18,6 +18,7 @@ import com.mycompany.reservationsystem.peer.data.PeerTable;
 public class BookingClient extends Thread{
 	public void run(){
 		while(true){
+			System.out.println("BookingClient");
 			PeerTable peerTable = PeerTable.getInstance();
 			yield();
 			peerTable.connect();
@@ -25,7 +26,9 @@ public class BookingClient extends Thread{
 			peerTable.disconnect();
 			yield();
 			for(Peer peer : peersByState){
-				new Thread(new BookingClientWorker(peer.getPeerIpAddress())).start();
+				BookingClientWorker bookingWorker = new BookingClientWorker(peer.getPeerIpAddress());
+				bookingWorker.setPriority(MAX_PRIORITY);
+				new Thread(bookingWorker).start();
 				yield();
 			}
 			yield();
