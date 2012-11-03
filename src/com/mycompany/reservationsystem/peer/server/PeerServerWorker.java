@@ -40,7 +40,9 @@ public class PeerServerWorker extends Thread{
 
 	public void run(){
 		PeerTable peerTable = PeerTable.getInstance();
+		peerTable.connect();
 		peerList = peerTable.getAllPeers();
+		peerTable.disconnect();
 		
 		try{
 			out = new ObjectOutputStream(connection.getOutputStream());
@@ -52,14 +54,13 @@ public class PeerServerWorker extends Thread{
 			while(isFinished() == false){
 				message = (String)in.readObject();
 				
-				if(nextIPIndex+1 >= peerList.size()){
+				if(nextIPIndex >= peerList.size()){
 					setFinished(true);
 				}
 				
 				if(message.equals(COMMUNICATION_MESSAGES.IP_REQUEST.toString()) && isFinished() == false){
 					sendMessage(COMMUNICATION_MESSAGES.IP_RESPONSE);
 				}
-				nextIPIndex++;
 			}
 		}
 		catch (IOException e) {
@@ -83,10 +84,12 @@ public class PeerServerWorker extends Thread{
 	
 	//Send message to client
 	private void sendMessage(COMMUNICATION_MESSAGES communicationMessage){
-		if(communicationMessage.equals(COMMUNICATION_MESSAGES.IP_RESPONSE)){
+		if(communicationMessage.toString().equals(COMMUNICATION_MESSAGES.IP_RESPONSE.toString())){
 			String message = "";
-			message += COMMUNICATION_MESSAGES.IP_RESPONSE.toString() + ":" + peerList.get(nextIPIndex);
-			
+			System.out.println(peerList.get(nextIPIndex).getPeerIpAddress());
+			message += COMMUNICATION_MESSAGES.IP_RESPONSE.toString() + ":" + peerList.get(nextIPIndex).getPeerIpAddress();
+			nextIPIndex++;
+			System.out.println(message);
 			try{
 				out.writeObject(message);
 				out.flush();
