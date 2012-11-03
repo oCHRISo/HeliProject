@@ -99,4 +99,55 @@ public class FlightBookingTable extends Database{
         }
     	return null;
     } 
+    
+    public synchronized ArrayList<FlightBooking> getAllBookings(){
+    	try {    		
+			resultSet = statement.executeQuery("SELECT * FROM flightbookings");
+			
+			ArrayList<FlightBooking> listOfBookings = new ArrayList<FlightBooking>();
+			
+			while(resultSet.next()){
+				FlightBooking booking = new FlightBooking();
+				booking.setTransactionTime(resultSet.getLong("transaction_epoch"));
+				booking.setEmail(resultSet.getString("email"));
+				booking.setFlightToCityAt(resultSet.getString("flight_to_city_at"));
+				booking.setFlightToCampAt(resultSet.getString("flight_to_camp_at"));
+				booking.setPrice(resultSet.getDouble("price"));
+				
+				if(resultSet.getInt("from_city") == 1){
+					booking.setFromCity(true);
+				}
+				else{
+					booking.setFromCity(false);
+				}
+				
+				if(resultSet.getInt("from_camp") == 1){
+					booking.setFromCamp(true);
+				}
+				else{
+					booking.setFromCamp(false);
+				}				
+				
+				if(resultSet.getString("state").equals(FlightBooking.STATE.REQUESTED.toString())){
+					booking.setState(FlightBooking.STATE.REQUESTED);
+				}
+				else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
+					booking.setState(FlightBooking.STATE.CONFIRMED);
+				}
+				else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
+					booking.setState(FlightBooking.STATE.CANCEL);
+				}
+				else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCELED.toString())){
+					booking.setState(FlightBooking.STATE.CANCELED);
+				}
+				
+	    		listOfBookings.add(booking);
+			}
+			return listOfBookings;
+    	}
+    	catch (Exception e) {  
+        e.printStackTrace();
+        }
+    	return null;
+    }
 }

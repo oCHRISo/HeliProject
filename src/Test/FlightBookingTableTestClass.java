@@ -15,7 +15,7 @@ public class FlightBookingTableTestClass {
 		
 		flightTable.connect();
 		flightTable.addBooking(newBooking);
-		ArrayList<FlightBooking> bookings = flightTable.findBookingByEmail("bob@gmail.com");
+		ArrayList<FlightBooking> bookings = flightTable.getAllBookings();
 		flightTable.disconnect();
 		
 		for(FlightBooking flight : bookings){
