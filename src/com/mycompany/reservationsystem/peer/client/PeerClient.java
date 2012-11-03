@@ -17,13 +17,15 @@ import com.mycompany.reservationsystem.peer.data.PeerTable;
  */
 public class PeerClient extends Thread{
 	public void run(){
-		PeerTable peerTable = PeerTable.getInstance();
-		peerTable.connect();
-		ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
-		peerTable.disconnect();
-		
-		for(Peer peer : peersByState){
-			new Thread(new PeerClientWorker(peer.getPeerIpAddress())).start();
+		while(true){
+			PeerTable peerTable = PeerTable.getInstance();
+			peerTable.connect();
+			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
+			peerTable.disconnect();
+			
+			for(Peer peer : peersByState){
+				new Thread(new PeerClientWorker(peer.getPeerIpAddress())).start();
+			}
 		}
 	}
 }
