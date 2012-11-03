@@ -18,7 +18,7 @@ public class ServerTestClass {
 		try {
 			System.out.println("Hello");
 			Thread.currentThread();
-			Thread.sleep(100000);
+			Thread.sleep(1000 * 60);
 		} 
 		catch (InterruptedException e) {
 			e.printStackTrace();
@@ -27,5 +27,7 @@ public class ServerTestClass {
 		peerDeamon.stop();
 		peerServer.stop();
 		bookingServer.stop();
+		peerServer.close();
+		bookingServer.close();
 	}
 }

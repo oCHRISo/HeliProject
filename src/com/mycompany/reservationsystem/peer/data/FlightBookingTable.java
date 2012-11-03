@@ -153,7 +153,7 @@ public class FlightBookingTable extends Database{
     
     public FlightBooking findFlightBooking(long transactionEpoch, String email){
     	try {
-    		resultSet = statement.executeQuery("SELECT * FROM flightbookings WHERE transaction_epoch = " + transactionEpoch + " email = '" + email + "'");
+    		resultSet = statement.executeQuery("SELECT * FROM flightbookings WHERE transaction_epoch = " + transactionEpoch + " AND email = '" + email + "'");
     		
     		FlightBooking booking = new FlightBooking();
     		

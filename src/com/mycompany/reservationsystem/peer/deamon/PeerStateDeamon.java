@@ -47,9 +47,10 @@ public class PeerStateDeamon extends Thread{
 					e.printStackTrace();
 				} 
 			}
-			//Deamon sleep for 1 second
+			
+			//Deamon sleep for 5 seconds
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 			} 
 			catch (InterruptedException e) {
 				e.printStackTrace();
