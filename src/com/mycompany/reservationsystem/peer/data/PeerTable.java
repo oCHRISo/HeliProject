@@ -95,6 +95,7 @@ public class PeerTable extends Database {
     
     public synchronized ArrayList<Peer> getAllPeers(){
     	try {    		
+    		
     		resultSet = statement.executeQuery("SELECT * FROM Peers");
     		
     		ArrayList<Peer> listOfPeers = new ArrayList<Peer>();
