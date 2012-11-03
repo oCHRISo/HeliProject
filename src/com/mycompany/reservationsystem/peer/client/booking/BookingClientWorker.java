@@ -35,6 +35,7 @@ public class BookingClientWorker extends Thread{
 				sendMessage(COMMUNICATION_MESSAGES.TRANSACTION_REQUEST);
 				
 				String message = (String) in.readObject();
+				System.out.println("Got message " + message);
 				if(message.startsWith(COMMUNICATION_MESSAGES.TRANSACTION_RESPONSE.toString())){
 					/*
 					 * Message with no booking shows that server has given all bookings, 
