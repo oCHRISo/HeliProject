@@ -1,6 +1,7 @@
 package com.mycompany.reservationsystem.peer.data;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PeerTable extends Database {
 	private static PeerTable instance = null;
@@ -121,4 +122,14 @@ public class PeerTable extends Database {
         }
     	return null;
     }
+    
+    public void logPeerInactive(String ipAddress){
+		PeerTable peerTable = PeerTable.getInstance();
+		peerTable.connect();
+		Peer peer = peerTable.findPeerByIpAddress(ipAddress);
+		peer.setState(Peer.STATE.INACTIVE);
+		peer.setEpochTime(new Date().getTime());
+		peerTable.updatePeer(peer);
+		peerTable.disconnect();
+	}
 }

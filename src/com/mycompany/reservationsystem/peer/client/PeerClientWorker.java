@@ -56,29 +56,36 @@ public class PeerClientWorker extends Thread {
 						String ipAddress = message.substring(message.indexOf(":")+1, message.length());
 						
 						PeerTable peerTable = PeerTable.getInstance();
+						peerTable.connect();
 						//Check if ip address is present, if ip address isn't present then will return null
 						if(peerTable.findPeerByIpAddress(ipAddress) == null){
 							//Add ip address to DB
 							Peer newPeer = new Peer(ipAddress,Peer.STATE.INACTIVE, new Date().getTime());
-							peerTable.connect();
 							peerTable.addPeer(newPeer);
-							peerTable.disconnect();
 						}
+						peerTable.disconnect();
 					}
 					else{
 						isFinished = true;
 					}
+					
 				}
 			}
 		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			logPeerInactive(ipAddress); //Log that this peer ip address is inactive
+			PeerTable peerTable = PeerTable.getInstance();
+			peerTable.connect();
+			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
+			peerTable.disconnect();
 		}
 		
 		catch(IOException ioException){
 			ioException.printStackTrace();
-			logPeerInactive(ipAddress); //Log that this peer ip address is inactive
+			PeerTable peerTable = PeerTable.getInstance();
+			peerTable.connect();
+			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
+			peerTable.disconnect();
 		}
 		finally{
 			//Closing connection
@@ -89,7 +96,10 @@ public class PeerClientWorker extends Thread {
 			}
 			catch(IOException ioException){
 				ioException.printStackTrace();
-				logPeerInactive(ipAddress);
+				PeerTable peerTable = PeerTable.getInstance();
+				peerTable.connect();
+				peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
+				peerTable.disconnect();
 			}
 		}
 	}
@@ -106,17 +116,10 @@ public class PeerClientWorker extends Thread {
 		}
 		catch(IOException ioException){
 			ioException.printStackTrace();
-			logPeerInactive(ipAddress); //Log that this peer ip address is inactive
+			PeerTable peerTable = PeerTable.getInstance();
+			peerTable.connect();
+			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
+			peerTable.disconnect();
 		}
-	}
-	
-	private void logPeerInactive(String ipAddress){
-		PeerTable peerTable = PeerTable.getInstance();
-		peerTable.connect();
-		Peer peer = peerTable.findPeerByIpAddress(ipAddress);
-		peer.setState(Peer.STATE.INACTIVE);
-		peer.setEpochTime(new Date().getTime());
-		peerTable.updatePeer(peer);
-		peerTable.disconnect();
 	}
 }
