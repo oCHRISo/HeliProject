@@ -123,7 +123,7 @@ public class PeerTable extends Database {
     	return null;
     }
     
-    public void logPeerInactive(String ipAddress){
+    public synchronized void logPeerInactive(String ipAddress){
 		PeerTable peerTable = PeerTable.getInstance();
 		peerTable.connect();
 		Peer peer = peerTable.findPeerByIpAddress(ipAddress);
