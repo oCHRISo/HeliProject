@@ -97,6 +97,8 @@ public class BookingClientWorker extends Thread{
 				peerTable.disconnect();
 				yield();
 			}
+			catch (NullPointerException e) {
+			}
 		}
  	}
  	
