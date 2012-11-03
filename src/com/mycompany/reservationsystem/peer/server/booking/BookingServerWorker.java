@@ -10,6 +10,20 @@ import com.mycompany.reservationsystem.peer.communication.COMMUNICATION_MESSAGES
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
 import com.mycompany.reservationsystem.peer.data.FlightBookingTable;
 
+/*
+ * Booking server worker thread giving known ip address to clients
+
+    Begin
+    Wait for client to connect
+    Client requests for a booking
+    Find all known bookings at given point in time
+    Send a booking  to client
+    Wait for client to ask for another
+    Repeat step 5 and 6 until given all bookings are sent
+    When all bookings are given send blank message
+    Client then disconnects
+    End
+ */
 public class BookingServerWorker extends Thread{
 	private Socket connection;
 	private ObjectOutputStream out;
@@ -69,7 +83,6 @@ public class BookingServerWorker extends Thread{
 	}
 	
 	//Send message to client
-	//TODO needs to make it work for bookings sends out one booking
 	private void sendMessage(COMMUNICATION_MESSAGES communicationMessage){
 		if(communicationMessage.toString().equals(COMMUNICATION_MESSAGES.TRANSACTION_RESPONSE.toString())){
 			String message = "";
@@ -98,6 +111,7 @@ public class BookingServerWorker extends Thread{
 			message += COMMUNICATION_MESSAGES.IP_RESPONSE.toString() + ":" + data;
 			nextBookingIndex++;
 			System.out.println(message);
+			
 			try{
 				out.writeObject(message);
 				out.flush();
