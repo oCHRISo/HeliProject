@@ -163,7 +163,6 @@ public class BookingClientWorker extends Thread{
  		else if(state.equals(FlightBooking.STATE.CANCELED.toString())){
  			booking.setState(FlightBooking.STATE.CANCELED);
  		}
- 		
  		return booking;
  	}
 }
