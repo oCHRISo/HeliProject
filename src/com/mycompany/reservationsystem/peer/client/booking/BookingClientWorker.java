@@ -93,7 +93,7 @@ public class BookingClientWorker extends Thread{
  	
  	private void sendMessage(COMMUNICATION_MESSAGES communicationMessage){
 		String message = "";
-		if(communicationMessage.equals(COMMUNICATION_MESSAGES.TRANSACTION_REQUEST)){
+		if(communicationMessage.toString().equals(COMMUNICATION_MESSAGES.TRANSACTION_REQUEST.toString())){
 			message += COMMUNICATION_MESSAGES.TRANSACTION_REQUEST.toString();
 		}
 		
