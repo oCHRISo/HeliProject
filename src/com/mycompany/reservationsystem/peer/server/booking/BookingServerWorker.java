@@ -108,7 +108,7 @@ public class BookingServerWorker extends Thread{
 			bookingList.get(nextBookingIndex).getState().toString() + ",";
 			
 			
-			message += COMMUNICATION_MESSAGES.IP_RESPONSE.toString() + ":" + data;
+			message += COMMUNICATION_MESSAGES.TRANSACTION_RESPONSE.toString() + ":" + data;
 			nextBookingIndex++;
 			System.out.println(message);
 			
