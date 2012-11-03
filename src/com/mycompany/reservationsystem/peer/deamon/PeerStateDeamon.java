@@ -49,9 +49,12 @@ public class PeerStateDeamon extends Thread{
 					}
 					yield();
 				} 
+				catch(NullPointerException e){
+					
+				}
 				catch (Exception e) {
 					e.printStackTrace();
-				} 
+				}
 			}
 			yield();
 		}
