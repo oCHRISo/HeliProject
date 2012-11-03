@@ -26,13 +26,7 @@ public class PeerClient extends Thread{
 			for(Peer peer : peersByState){
 				new Thread(new PeerClientWorker(peer.getPeerIpAddress())).start();
 			}
-			
-			try {
-				sleep(5100);
-			} 
-			catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			yield();
 		}
 	}
 }
