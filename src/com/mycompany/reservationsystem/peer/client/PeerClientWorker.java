@@ -55,12 +55,15 @@ public class PeerClientWorker extends Thread {
 					if(message.length() != 12){
 						String ipAddress = message.substring(message.indexOf(":")+1, message.length());
 						
-						//Add ip address to DB
 						PeerTable peerTable = PeerTable.getInstance();
-						Peer newPeer = new Peer(ipAddress,Peer.STATE.INACTIVE, new Date().getTime());
-						peerTable.connect();
-						peerTable.addPeer(newPeer);
-						peerTable.disconnect();
+						//Check if ip address is present, if ip address isn't present then will return null
+						if(peerTable.findPeerByIpAddress(ipAddress) == null){
+							//Add ip address to DB
+							Peer newPeer = new Peer(ipAddress,Peer.STATE.INACTIVE, new Date().getTime());
+							peerTable.connect();
+							peerTable.addPeer(newPeer);
+							peerTable.disconnect();
+						}
 					}
 					else{
 						isFinished = true;
