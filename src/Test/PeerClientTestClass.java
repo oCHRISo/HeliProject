@@ -11,7 +11,7 @@ public class PeerClientTestClass {
 		try {
 			System.out.println("Hello");
 			Thread.currentThread();
-			Thread.sleep(Integer.parseInt(args[0]));
+			Thread.sleep(100000);
 		} 
 		catch (InterruptedException e) {
 			e.printStackTrace();
