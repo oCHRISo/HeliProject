@@ -56,6 +56,7 @@ public class PeerClientWorker extends Thread {
 						String ipAddress = message.substring(message.indexOf(":")+1, message.length());
 						
 						PeerTable peerTable = PeerTable.getInstance();
+						yield();
 						peerTable.connect();
 						//Check if ip address is present, if ip address isn't present then will return null
 						if(peerTable.findPeerByIpAddress(ipAddress) == null){
@@ -64,6 +65,7 @@ public class PeerClientWorker extends Thread {
 							peerTable.addPeer(newPeer);
 						}
 						peerTable.disconnect();
+						yield();
 					}
 					else{
 						isFinished = true;
@@ -74,18 +76,22 @@ public class PeerClientWorker extends Thread {
 		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			yield();
 			PeerTable peerTable = PeerTable.getInstance();
 			peerTable.connect();
 			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
 			peerTable.disconnect();
+			yield();
 		}
 		
 		catch(IOException ioException){
 			ioException.printStackTrace();
+			yield();
 			PeerTable peerTable = PeerTable.getInstance();
 			peerTable.connect();
 			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
 			peerTable.disconnect();
+			yield();
 		}
 		finally{
 			//Closing connection
@@ -96,10 +102,12 @@ public class PeerClientWorker extends Thread {
 			}
 			catch(IOException ioException){
 				ioException.printStackTrace();
+				yield();
 				PeerTable peerTable = PeerTable.getInstance();
 				peerTable.connect();
 				peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
 				peerTable.disconnect();
+				yield();
 			}
 		}
 	}
@@ -116,10 +124,12 @@ public class PeerClientWorker extends Thread {
 		}
 		catch(IOException ioException){
 			ioException.printStackTrace();
+			yield();
 			PeerTable peerTable = PeerTable.getInstance();
 			peerTable.connect();
 			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
 			peerTable.disconnect();
+			yield();
 		}
 	}
 }

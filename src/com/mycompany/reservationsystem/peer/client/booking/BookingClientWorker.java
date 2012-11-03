@@ -48,11 +48,13 @@ public class BookingClientWorker extends Thread{
 						FlightBooking booking = parseBookingMessage(dataPartOfMessage);
 						
 						FlightBookingTable flightTable = FlightBookingTable.getInstance();
+						yield();
 						flightTable.connect();
 						if(flightTable.findFlightBooking(booking.getTransactionTime(), booking.getEmail()) == null){
 							flightTable.addBooking(booking);
 						}
 						flightTable.disconnect();
+						yield();
 					}
 					else{ //Got blank booking
 						isFinished = true;
@@ -63,17 +65,21 @@ public class BookingClientWorker extends Thread{
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			PeerTable peerTable = PeerTable.getInstance();
+			yield();
 			peerTable.connect();
 			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
 			peerTable.disconnect();
+			yield();
 		}
 		
 		catch(IOException ioException){
 			ioException.printStackTrace();
 			PeerTable peerTable = PeerTable.getInstance();
+			yield();
 			peerTable.connect();
 			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
 			peerTable.disconnect();
+			yield();
 		}
 		finally{
 			//Closing connection
@@ -85,9 +91,11 @@ public class BookingClientWorker extends Thread{
 			catch(IOException ioException){
 				ioException.printStackTrace();
 				PeerTable peerTable = PeerTable.getInstance();
+				yield();
 				peerTable.connect();
 				peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
 				peerTable.disconnect();
+				yield();
 			}
 		}
  	}
@@ -105,14 +113,15 @@ public class BookingClientWorker extends Thread{
 		catch(IOException ioException){
 			ioException.printStackTrace();
 			PeerTable peerTable = PeerTable.getInstance();
+			yield();
 			peerTable.connect();
 			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
 			peerTable.disconnect();
+			yield();
 		}
 	}
  	
- 	//1351858413975,bob@gmail.com,31/08/2012@1200,NA,0,1,0,REQUESTED,
- 	//TODO substring could be wrong for all data
+ 	//Sample data = 1351858413975,bob@gmail.com,31/08/2012@1200,NA,0,1,0,REQUESTED,
  	private FlightBooking parseBookingMessage(String dataPartOfMessage){
  		FlightBooking booking = new FlightBooking();
  		

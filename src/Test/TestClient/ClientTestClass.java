@@ -18,7 +18,7 @@ public class ClientTestClass {
 		try {
 			System.out.println("Hello");
 			Thread.currentThread();
-			Thread.sleep(1000 * 60);
+			Thread.sleep(1000 * 500);
 		} 
 		catch (InterruptedException e) {
 			e.printStackTrace();

@@ -19,12 +19,14 @@ public class PeerClient extends Thread{
 	public void run(){
 		while(true){
 			PeerTable peerTable = PeerTable.getInstance();
+			yield();
 			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
 			peerTable.disconnect();
 			
 			for(Peer peer : peersByState){
 				new Thread(new PeerClientWorker(peer.getPeerIpAddress())).start();
+				yield();
 			}
 			yield();
 		}
