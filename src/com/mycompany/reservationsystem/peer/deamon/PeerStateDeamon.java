@@ -55,6 +55,12 @@ public class PeerStateDeamon extends Thread{
 				catch (Exception e) {
 					e.printStackTrace();
 				}
+				try {
+					sleep(60000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			yield();
 		}
