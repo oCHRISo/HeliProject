@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import com.mycompany.reservationsystem.peer.communication.COMMUNICATION_MESSAGES;
+import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
 import com.mycompany.reservationsystem.peer.data.FlightBookingTable;
 import com.mycompany.reservationsystem.peer.data.PeerTable;
@@ -32,11 +32,11 @@ public class BookingClientWorker extends Thread{
 			in = new ObjectInputStream(requestSocket.getInputStream());
 			
 			while(isFinished == false){
-				sendMessage(COMMUNICATION_MESSAGES.TRANSACTION_REQUEST);
+				sendMessage(CommunicationMessages.TRANSACTION_REQUEST);
 				
 				String message = (String) in.readObject();
 				System.out.println("Got message " + message);
-				if(message.startsWith(COMMUNICATION_MESSAGES.TRANSACTION_RESPONSE.toString())){
+				if(message.startsWith(CommunicationMessages.TRANSACTION_RESPONSE.toString())){
 					/*
 					 * Message with no booking shows that server has given all bookings, 
 					 * server will return TRANSACTION_RESPONSE: (21 chars)
@@ -102,10 +102,10 @@ public class BookingClientWorker extends Thread{
 		}
  	}
  	
- 	private void sendMessage(COMMUNICATION_MESSAGES communicationMessage){
+ 	private void sendMessage(CommunicationMessages communicationMessage){
 		String message = "";
-		if(communicationMessage.toString().equals(COMMUNICATION_MESSAGES.TRANSACTION_REQUEST.toString())){
-			message += COMMUNICATION_MESSAGES.TRANSACTION_REQUEST.toString();
+		if(communicationMessage.toString().equals(CommunicationMessages.TRANSACTION_REQUEST.toString())){
+			message += CommunicationMessages.TRANSACTION_REQUEST.toString();
 		}
 		
 		try{

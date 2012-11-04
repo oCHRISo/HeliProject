@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Date;
 
-import com.mycompany.reservationsystem.peer.communication.COMMUNICATION_MESSAGES;
+import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.Peer;
 import com.mycompany.reservationsystem.peer.data.PeerTable;
 
@@ -44,10 +44,10 @@ public class PeerClientWorker extends Thread {
 			in = new ObjectInputStream(requestSocket.getInputStream());
 			
 			while(isFinished == false){
-				sendMessage(COMMUNICATION_MESSAGES.IP_REQUEST);
+				sendMessage(CommunicationMessages.IP_REQUEST);
 				
 				String message = (String) in.readObject();
-				if(message.startsWith(COMMUNICATION_MESSAGES.IP_RESPONSE.toString())){
+				if(message.startsWith(CommunicationMessages.IP_RESPONSE.toString())){
 					/*
 					 * Message with no ip address shows that server has given all ip address, 
 					 * server will return IP_RESPONSE: (12 chars)
@@ -117,10 +117,10 @@ public class PeerClientWorker extends Thread {
 		}
 	}
 	
-	private void sendMessage(COMMUNICATION_MESSAGES communicationMessage){
+	private void sendMessage(CommunicationMessages communicationMessage){
 		String message = "";
-		if(communicationMessage.toString().equals(COMMUNICATION_MESSAGES.IP_REQUEST.toString())){
-			message += COMMUNICATION_MESSAGES.IP_REQUEST.toString();
+		if(communicationMessage.toString().equals(CommunicationMessages.IP_REQUEST.toString())){
+			message += CommunicationMessages.IP_REQUEST.toString();
 		}
 		
 		try{

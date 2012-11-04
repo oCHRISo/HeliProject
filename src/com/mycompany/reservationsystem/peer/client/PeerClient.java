@@ -1,6 +1,8 @@
 package com.mycompany.reservationsystem.peer.client;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.mycompany.reservationsystem.peer.data.Peer;
 import com.mycompany.reservationsystem.peer.data.PeerTable;
@@ -16,6 +18,8 @@ import com.mycompany.reservationsystem.peer.data.PeerTable;
     End
  */
 public class PeerClient extends Thread{
+	private ExecutorService pool = Executors.newFixedThreadPool(10);
+	
 	public void run(){
 		while(true){
 			//System.out.println("PeerClient");
@@ -26,8 +30,7 @@ public class PeerClient extends Thread{
 			
 			try{
 				for(Peer peer : peersByState){
-					PeerClientWorker peerWorker = new PeerClientWorker(peer.getPeerIpAddress());
-					new Thread(peerWorker).start();
+					pool.execute(new PeerClientWorker(peer.getPeerIpAddress()));
 				}
 			}
 			catch(NullPointerException e){

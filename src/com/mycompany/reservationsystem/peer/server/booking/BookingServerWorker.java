@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.mycompany.reservationsystem.peer.communication.COMMUNICATION_MESSAGES;
+import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
 import com.mycompany.reservationsystem.peer.data.FlightBookingTable;
 
@@ -58,8 +58,8 @@ public class BookingServerWorker extends Thread{
 					setFinished(true);
 				}
 				
-				if(message.equals(COMMUNICATION_MESSAGES.TRANSACTION_REQUEST.toString()) && isFinished() == false){
-					sendMessage(COMMUNICATION_MESSAGES.TRANSACTION_RESPONSE);
+				if(message.equals(CommunicationMessages.TRANSACTION_REQUEST.toString()) && isFinished() == false){
+					sendMessage(CommunicationMessages.TRANSACTION_RESPONSE);
 				}
 			}
 		}
@@ -83,8 +83,8 @@ public class BookingServerWorker extends Thread{
 	}
 	
 	//Send message to client
-	private void sendMessage(COMMUNICATION_MESSAGES communicationMessage){
-		if(communicationMessage.toString().equals(COMMUNICATION_MESSAGES.TRANSACTION_RESPONSE.toString())){
+	private void sendMessage(CommunicationMessages communicationMessage){
+		if(communicationMessage.toString().equals(CommunicationMessages.TRANSACTION_RESPONSE.toString())){
 			String message = "";
 			System.out.println(bookingList.get(nextBookingIndex).getEmail());
 			
@@ -108,7 +108,7 @@ public class BookingServerWorker extends Thread{
 			bookingList.get(nextBookingIndex).getState().toString() + ",";
 			
 			
-			message += COMMUNICATION_MESSAGES.TRANSACTION_RESPONSE.toString() + ":" + data;
+			message += CommunicationMessages.TRANSACTION_RESPONSE.toString() + ":" + data;
 			nextBookingIndex++;
 			System.out.println(message);
 			

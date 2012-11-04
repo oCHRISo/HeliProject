@@ -30,7 +30,6 @@ public class PeerStateDeamon extends Thread{
 			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.INACTIVE);
 			peerTable.disconnect();
-			System.out.println("Deamon Running");
 			for(Peer peer : peersByState){
 				try 
 				{

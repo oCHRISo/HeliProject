@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.mycompany.reservationsystem.peer.communication.COMMUNICATION_MESSAGES;
+import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.Peer;
 import com.mycompany.reservationsystem.peer.data.PeerTable;
 
@@ -58,8 +58,8 @@ public class PeerServerWorker extends Thread{
 					setFinished(true);
 				}
 				
-				if(message.equals(COMMUNICATION_MESSAGES.IP_REQUEST.toString()) && isFinished() == false){
-					sendMessage(COMMUNICATION_MESSAGES.IP_RESPONSE);
+				if(message.equals(CommunicationMessages.IP_REQUEST.toString()) && isFinished() == false){
+					sendMessage(CommunicationMessages.IP_RESPONSE);
 				}
 			}
 		}
@@ -83,11 +83,11 @@ public class PeerServerWorker extends Thread{
 	}
 	
 	//Send message to client
-	private void sendMessage(COMMUNICATION_MESSAGES communicationMessage){
-		if(communicationMessage.toString().equals(COMMUNICATION_MESSAGES.IP_RESPONSE.toString())){
+	private void sendMessage(CommunicationMessages communicationMessage){
+		if(communicationMessage.toString().equals(CommunicationMessages.IP_RESPONSE.toString())){
 			String message = "";
 			System.out.println(peerList.get(nextIPIndex).getPeerIpAddress());
-			message += COMMUNICATION_MESSAGES.IP_RESPONSE.toString() + ":" + peerList.get(nextIPIndex).getPeerIpAddress();
+			message += CommunicationMessages.IP_RESPONSE.toString() + ":" + peerList.get(nextIPIndex).getPeerIpAddress();
 			nextIPIndex++;
 			System.out.println(message);
 			try{
