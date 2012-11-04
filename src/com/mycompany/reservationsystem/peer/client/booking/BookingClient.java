@@ -25,7 +25,6 @@ public class BookingClient extends Thread{
 		while(true){
 			Database peerTable = Database.getInstance();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
-			
 			if(peersByState.size() != 0){
 				for(Peer peer : peersByState){
 					pool.execute(new BookingClientWorker(peer.getPeerIpAddress()));

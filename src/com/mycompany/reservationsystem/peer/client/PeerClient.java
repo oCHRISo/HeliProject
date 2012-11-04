@@ -39,7 +39,7 @@ public class PeerClient extends Thread{
 			}
 			else{
 				try {
-					sleep(new Random().nextInt(500));
+					sleep(new Random().nextInt(10000));
 				} 
 				catch (InterruptedException e) {
 					//e.printStackTrace();

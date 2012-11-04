@@ -10,9 +10,9 @@ import java.util.Date;
 
 public class Database {
 	private static Database instance = null;
-	private Connection connection = null;  
-	private ResultSet resultSet = null;  
-	private Statement statement = null;
+	private static Connection connection = null;  
+	private static ResultSet resultSet = null;  
+	private static Statement statement = null;
 	private static final String connectionString = "jdbc:sqlite:data\\peer.db";
     
     
