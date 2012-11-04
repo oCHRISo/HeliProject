@@ -40,7 +40,6 @@ public class PeerServer extends Thread {
 			finally{
 				//Closing connection
 				try{
-					pool.shutdown();
 					serverSocket.close();
 				}
 				catch(IOException ioException){
@@ -55,6 +54,7 @@ public class PeerServer extends Thread {
 		try {
 			Socket socket = new Socket("127.0.0.1",PORT_NUMBER);
 			socket.close();
+			pool.shutdown();
 		} 
 		catch (UnknownHostException e) {
 			//e.printStackTrace();

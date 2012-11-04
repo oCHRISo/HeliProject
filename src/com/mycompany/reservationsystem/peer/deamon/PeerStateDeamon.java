@@ -28,7 +28,7 @@ public class PeerStateDeamon extends Thread{
 	public void run(){
 		while(true){
 			Database peerTable = Database.getInstance();
-			ArrayList<Peer> peersByState = peerTable.getAllPeers();
+			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.INACTIVE);
 			
 			for(Peer peer : peersByState){
 				try 
@@ -36,12 +36,6 @@ public class PeerStateDeamon extends Thread{
 					if(InetAddress.getByName(peer.getPeerIpAddress().trim()).isReachable(timeout)){
 						System.out.println("Found " + peer.getPeerIpAddress().trim());
 						peer.setState(Peer.STATE.ACTIVE);
-						peer.setEpochTime(new Date().getTime());
-						peerTable.updatePeer(peer);
-					}
-					else{
-						System.out.println("Can't find " + peer.getPeerIpAddress().trim());
-						peer.setState(Peer.STATE.INACTIVE);
 						peer.setEpochTime(new Date().getTime());
 						peerTable.updatePeer(peer);
 					}
