@@ -67,10 +67,11 @@ public class PeerTable extends Database {
     }
     
     public synchronized ArrayList<Peer> findPeersByState(Peer.STATE state){
+    	ArrayList<Peer> listOfPeers = new ArrayList<Peer>();
     	try {    		
     		resultSet = statement.executeQuery("SELECT * FROM Peers WHERE active='" + state.toString() + "'");
     		
-    		ArrayList<Peer> listOfPeers = new ArrayList<Peer>();
+    		listOfPeers = new ArrayList<Peer>();
     		
     		while(resultSet.next()){
     			Peer peer = new Peer();
@@ -88,10 +89,13 @@ public class PeerTable extends Database {
     		}
     		return listOfPeers;
     	}
+    	catch(NullPointerException e){
+    		
+    	}
     	catch (Exception e) {  
         e.printStackTrace();
         }
-    	return null;
+    	return listOfPeers;
     }
     
     public synchronized ArrayList<Peer> getAllPeers(){

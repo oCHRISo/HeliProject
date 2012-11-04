@@ -28,13 +28,15 @@ public class PeerClient extends Thread{
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
 			peerTable.disconnect();
 			
-			try{
-				for(Peer peer : peersByState){
-					pool.execute(new PeerClientWorker(peer.getPeerIpAddress()));
+			if(peersByState.size() != 0){
+				try{
+					for(Peer peer : peersByState){
+						pool.execute(new PeerClientWorker(peer.getPeerIpAddress()));
+					}
 				}
-			}
-			catch(NullPointerException e){
-				
+				catch(NullPointerException e){
+					
+				}
 			}
 			yield();
 		}
