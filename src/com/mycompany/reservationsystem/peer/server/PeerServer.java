@@ -44,7 +44,7 @@ public class PeerServer extends Thread {
 					serverSocket.close();
 				}
 				catch(IOException ioException){
-					ioException.printStackTrace();
+					//ioException.printStackTrace();
 				}
 			}
 		}

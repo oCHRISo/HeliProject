@@ -40,9 +40,7 @@ public class BookingServerWorker extends Thread{
 	
 	public void run(){
 		Database bookingTable = Database.getInstance();
-		bookingTable.connect();
 		bookingList = bookingTable.getAllBookings();
-		bookingTable.disconnect();
 		
 		try{
 			out = new ObjectOutputStream(connection.getOutputStream());

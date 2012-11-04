@@ -3,12 +3,14 @@ package Test.TestClient;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.deamon.PeerStateDeamon;
 import com.mycompany.reservationsystem.peer.server.PeerServer;
 import com.mycompany.reservationsystem.peer.server.booking.BookingServer;
 
 public class ServerTestClass {
 	public static void main(String[] args) {
+		Database.getInstance().connect();
 		PeerStateDeamon peerDeamon = new PeerStateDeamon();
 		PeerServer peerServer = new PeerServer();
 		BookingServer bookingServer = new BookingServer();
@@ -30,5 +32,6 @@ public class ServerTestClass {
 		peerServer.close();
 		bookingServer.close();
 		pool.shutdown();
+		Database.getInstance().disconnect();
 	}
 }

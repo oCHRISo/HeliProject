@@ -57,14 +57,12 @@ public class PeerClientWorker extends Thread {
 						
 						Database peerTable = Database.getInstance();
 						yield();
-						peerTable.connect();
 						//Check if ip address is present, if ip address isn't present then will return null
 						if(peerTable.findPeerByIpAddress(ipAddress) == null){
 							//Add ip address to DB
 							Peer newPeer = new Peer(ipAddress,Peer.STATE.INACTIVE, new Date().getTime());
 							peerTable.addPeer(newPeer);
 						}
-						peerTable.disconnect();
 						yield();
 					}
 					else{

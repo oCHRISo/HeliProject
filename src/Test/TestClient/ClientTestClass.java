@@ -5,10 +5,12 @@ import java.util.concurrent.Executors;
 
 import com.mycompany.reservationsystem.peer.client.PeerClient;
 import com.mycompany.reservationsystem.peer.client.booking.BookingClient;
+import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.deamon.PeerStateDeamon;
 
 public class ClientTestClass {
 	public static void main(String[] args) {
+		Database.getInstance().connect();
 		PeerStateDeamon peerDeamon = new PeerStateDeamon();
 		PeerClient peerClient = new PeerClient();
 		BookingClient bookingClient = new BookingClient();
@@ -28,5 +30,6 @@ public class ClientTestClass {
 		}
 		
 		pool.shutdown();
+		Database.getInstance().disconnect();
 	}
 }

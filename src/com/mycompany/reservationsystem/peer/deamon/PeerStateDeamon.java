@@ -28,28 +28,22 @@ public class PeerStateDeamon extends Thread{
 	public void run(){
 		while(true){
 			Database peerTable = Database.getInstance();
-			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.getAllPeers();
-			peerTable.disconnect();
 			
 			for(Peer peer : peersByState){
 				try 
 				{
 					if(InetAddress.getByName(peer.getPeerIpAddress().trim()).isReachable(timeout)){
 						System.out.println("Found " + peer.getPeerIpAddress().trim());
-						peerTable.connect();
 						peer.setState(Peer.STATE.ACTIVE);
 						peer.setEpochTime(new Date().getTime());
 						peerTable.updatePeer(peer);
-						peerTable.disconnect();
 					}
 					else{
 						System.out.println("Can't find " + peer.getPeerIpAddress().trim());
-						peerTable.connect();
 						peer.setState(Peer.STATE.INACTIVE);
 						peer.setEpochTime(new Date().getTime());
 						peerTable.updatePeer(peer);
-						peerTable.disconnect();
 					}
 				} 
 				catch(NullPointerException e){
@@ -61,7 +55,8 @@ public class PeerStateDeamon extends Thread{
 			}
 			
 			try {
-				sleep(new Random().nextInt(10000));
+				//Will at least sleep for 100 milliseconds 
+				sleep(new Random().nextInt(10000)+100);
 			} 
 			catch (InterruptedException e) {
 				

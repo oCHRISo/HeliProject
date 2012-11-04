@@ -40,9 +40,7 @@ public class PeerServerWorker extends Thread{
 
 	public void run(){
 		Database peerTable = Database.getInstance();
-		peerTable.connect();
 		peerList = peerTable.getAllPeers();
-		peerTable.disconnect();
 		
 		try{
 			out = new ObjectOutputStream(connection.getOutputStream());

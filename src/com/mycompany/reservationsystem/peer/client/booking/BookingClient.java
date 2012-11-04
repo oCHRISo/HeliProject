@@ -24,9 +24,7 @@ public class BookingClient extends Thread{
 	public void run(){
 		while(true){
 			Database peerTable = Database.getInstance();
-			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
-			peerTable.disconnect();
 			
 			if(peersByState.size() != 0){
 				for(Peer peer : peersByState){

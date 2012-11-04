@@ -48,11 +48,9 @@ public class BookingClientWorker extends Thread{
 						
 						Database flightTable = Database.getInstance();
 						yield();
-						flightTable.connect();
 						if(flightTable.findFlightBooking(booking.getTransactionTime(), booking.getEmail()) == null){
 							flightTable.addBooking(booking);
 						}
-						flightTable.disconnect();
 						yield();
 					}
 					else{ //Got blank booking

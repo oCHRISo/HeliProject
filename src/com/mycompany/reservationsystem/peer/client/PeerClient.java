@@ -25,9 +25,7 @@ public class PeerClient extends Thread{
 		while(true){
 			//System.out.println("PeerClient");
 			Database peerTable = Database.getInstance();
-			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
-			peerTable.disconnect();
 			
 			if(peersByState.size() != 0){
 				try{
