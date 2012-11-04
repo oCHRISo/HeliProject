@@ -50,7 +50,7 @@ public class PeerStateDeamon extends Thread{
 			}
 			
 			try {
-				sleep(new Random().nextInt(1000*60));
+				sleep(new Random().nextInt(1000*10));
 			} 
 			catch (InterruptedException e) {
 				

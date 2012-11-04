@@ -51,7 +51,7 @@ public class BookingServerWorker extends Thread{
 			String message = null;
 			
 			try {
-				sleep(new Random().nextInt(5000));
+				sleep(new Random().nextInt(1500));
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

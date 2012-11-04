@@ -51,7 +51,7 @@ public class BookingClient extends Thread{
 			}
 			else{
 				try {
-					sleep(new Random().nextInt(5000));
+					sleep(new Random().nextInt(2000));
 				} 
 				catch (InterruptedException e) {
 					//e.printStackTrace();
