@@ -7,8 +7,8 @@ import java.net.Socket;
 import java.util.Date;
 
 import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
+import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.Peer;
-import com.mycompany.reservationsystem.peer.data.PeerTable;
 
 /*
  * Peer client thread getting ip addresses from peer server
@@ -55,7 +55,7 @@ public class PeerClientWorker extends Thread {
 					if(message.length() != 12){
 						String ipAddress = message.substring(message.indexOf(":")+1, message.length());
 						
-						PeerTable peerTable = PeerTable.getInstance();
+						Database peerTable = Database.getInstance();
 						yield();
 						peerTable.connect();
 						//Check if ip address is present, if ip address isn't present then will return null

@@ -2,13 +2,13 @@ package Test;
 
 import java.util.ArrayList;
 
-import com.mycompany.reservationsystem.peer.data.CompanyTable;
+import com.mycompany.reservationsystem.peer.data.Database;
 /*
  * 
  */
 public class CompanyTableTestClass {
 	public static void main(String[] args) {
-		CompanyTable companyTable = CompanyTable.getInstance();
+		Database companyTable = Database.getInstance();
 		companyTable.connect();
 		ArrayList<String> companies = companyTable.getCompanies();
 		companyTable.disconnect();

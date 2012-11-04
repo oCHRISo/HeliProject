@@ -2,8 +2,8 @@ package Test;
 
 import java.util.Date;
 
+import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.Peer;
-import com.mycompany.reservationsystem.peer.data.PeerTable;
 
 /*
  * 
@@ -15,7 +15,7 @@ public class PeerTableTestClass {
 		
 		Peer newPeer = new Peer(ipAddress, Peer.STATE.ACTIVE, new Date().getTime());
 		
-		PeerTable peerTable = PeerTable.getInstance();
+		Database peerTable = Database.getInstance();
 		peerTable.connect();
 		peerTable.addPeer(newPeer);
 		

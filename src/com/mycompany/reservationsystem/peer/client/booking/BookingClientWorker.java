@@ -6,8 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
+import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
-import com.mycompany.reservationsystem.peer.data.FlightBookingTable;
 
 public class BookingClientWorker extends Thread{
 	private static final int PORT_NUMBER = 50001;
@@ -46,7 +46,7 @@ public class BookingClientWorker extends Thread{
 						String dataPartOfMessage = message.substring(message.indexOf(":")+1, message.length());
 						FlightBooking booking = parseBookingMessage(dataPartOfMessage);
 						
-						FlightBookingTable flightTable = FlightBookingTable.getInstance();
+						Database flightTable = Database.getInstance();
 						yield();
 						flightTable.connect();
 						if(flightTable.findFlightBooking(booking.getTransactionTime(), booking.getEmail()) == null){

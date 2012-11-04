@@ -26,7 +26,6 @@ public class BookingServer extends Thread{
 			finally{
 				//Closing connection
 				try{
-					pool.shutdown();
 					serverSocket.close();
 				}
 				catch(IOException ioException){

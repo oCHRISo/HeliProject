@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.Peer;
-import com.mycompany.reservationsystem.peer.data.PeerTable;
 
 /*
  * Thread to maintain peer states
@@ -27,7 +27,7 @@ public class PeerStateDeamon extends Thread{
 	
 	public void run(){
 		while(true){
-			PeerTable peerTable = PeerTable.getInstance();
+			Database peerTable = Database.getInstance();
 			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.getAllPeers();
 			peerTable.disconnect();

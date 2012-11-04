@@ -2,14 +2,14 @@ package Test;
 
 import java.util.ArrayList;
 
-import com.mycompany.reservationsystem.peer.data.TimeTable;
+import com.mycompany.reservationsystem.peer.data.Database;
 
 /*
  * 
  */
 public class TimeTableTestClass {
 	public static void main(String[] args) {
-		TimeTable timeTable = TimeTable.getInstance();
+		Database timeTable = Database.getInstance();
 		timeTable.connect();
 		ArrayList<Integer> times = timeTable.getTimes();
 		timeTable.disconnect();

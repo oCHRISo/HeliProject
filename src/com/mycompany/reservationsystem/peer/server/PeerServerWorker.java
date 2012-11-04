@@ -7,8 +7,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
+import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.Peer;
-import com.mycompany.reservationsystem.peer.data.PeerTable;
 
 /*
  * Server thread giving known ip address to clients
@@ -39,7 +39,7 @@ public class PeerServerWorker extends Thread{
 	}
 
 	public void run(){
-		PeerTable peerTable = PeerTable.getInstance();
+		Database peerTable = Database.getInstance();
 		peerTable.connect();
 		peerList = peerTable.getAllPeers();
 		peerTable.disconnect();

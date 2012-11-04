@@ -5,8 +5,8 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.Peer;
-import com.mycompany.reservationsystem.peer.data.PeerTable;
 
 /*
  * Peer client spawns all peer worker threads that connect to many servers
@@ -24,7 +24,7 @@ public class PeerClient extends Thread{
 	public void run(){
 		while(true){
 			//System.out.println("PeerClient");
-			PeerTable peerTable = PeerTable.getInstance();
+			Database peerTable = Database.getInstance();
 			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
 			peerTable.disconnect();

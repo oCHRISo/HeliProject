@@ -7,8 +7,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
+import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
-import com.mycompany.reservationsystem.peer.data.FlightBookingTable;
 
 /*
  * Booking server worker thread giving known ip address to clients
@@ -39,7 +39,7 @@ public class BookingServerWorker extends Thread{
 	}
 	
 	public void run(){
-		FlightBookingTable bookingTable = FlightBookingTable.getInstance();
+		Database bookingTable = Database.getInstance();
 		bookingTable.connect();
 		bookingList = bookingTable.getAllBookings();
 		bookingTable.disconnect();
@@ -77,7 +77,7 @@ public class BookingServerWorker extends Thread{
 				connection.close();
 			}
 			catch(IOException ioException){
-				ioException.printStackTrace();
+				//ioException.printStackTrace();
 			}
 		}
 	}
