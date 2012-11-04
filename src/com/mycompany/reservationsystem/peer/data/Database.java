@@ -16,7 +16,7 @@ public class Database {
 	private static final String connectionString = "jdbc:sqlite:data\\peer.db";
     
     
-    public static Database getInstance(){
+    public synchronized static Database getInstance(){
     	if(instance == null){
     		instance = new Database();
     	}
