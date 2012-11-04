@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BookingServer extends Thread{
 	private static final int PORT_NUMBER = 50001;
 	private ServerSocket serverSocket;
+	private ExecutorService pool = Executors.newFixedThreadPool(50);
 	
 	public void run(){
 		while(true){
@@ -15,9 +18,7 @@ public class BookingServer extends Thread{
 				serverSocket = new ServerSocket(PORT_NUMBER);
 				Socket connection = serverSocket.accept();
 				//Spawn new thread for client
-				BookingServerWorker bookingWorker = new BookingServerWorker(connection);
-				bookingWorker.setPriority(MAX_PRIORITY);
-				new Thread(bookingWorker).start();
+				pool.equals(new BookingServerWorker(connection));
 			} 
 			catch (IOException e) {
 				e.printStackTrace();
@@ -25,6 +26,7 @@ public class BookingServer extends Thread{
 			finally{
 				//Closing connection
 				try{
+					pool.shutdown();
 					serverSocket.close();
 				}
 				catch(IOException ioException){
