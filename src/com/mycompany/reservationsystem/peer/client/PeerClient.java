@@ -44,7 +44,7 @@ public class PeerClient extends Thread{
 					sleep(new Random().nextInt(500));
 				} 
 				catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
 			yield();

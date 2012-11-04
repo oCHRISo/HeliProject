@@ -62,11 +62,11 @@ public class BookingClientWorker extends Thread{
 			}
  		}
 		catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		catch(IOException ioException){
-			ioException.printStackTrace();
+			//ioException.printStackTrace();
 		}
 		finally{
 			//Closing connection
@@ -76,7 +76,7 @@ public class BookingClientWorker extends Thread{
 				requestSocket.close();
 			}
 			catch(IOException ioException){
-				ioException.printStackTrace();
+				//ioException.printStackTrace();
 			}
 			catch (NullPointerException e) {
 			}
@@ -94,7 +94,7 @@ public class BookingClientWorker extends Thread{
 			out.flush();
 		}
 		catch(IOException ioException){
-			ioException.printStackTrace();
+			//ioException.printStackTrace();
 		}
 	}
  	

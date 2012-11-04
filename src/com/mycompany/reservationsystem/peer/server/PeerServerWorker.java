@@ -64,10 +64,10 @@ public class PeerServerWorker extends Thread{
 			}
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		finally{
 			//Closing connection
@@ -77,7 +77,7 @@ public class PeerServerWorker extends Thread{
 				connection.close();
 			}
 			catch(IOException ioException){
-				ioException.printStackTrace();
+				//ioException.printStackTrace();
 			}
 		}
 	}
@@ -95,7 +95,7 @@ public class PeerServerWorker extends Thread{
 				out.flush();
 			}
 			catch(IOException ioException){
-				ioException.printStackTrace();
+				//ioException.printStackTrace();
 			}
 		}
 	}

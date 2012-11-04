@@ -56,14 +56,15 @@ public class PeerStateDeamon extends Thread{
 					
 				}
 				catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
 			
 			try {
 				sleep(new Random().nextInt(10000));
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} 
+			catch (InterruptedException e) {
+				
 			}
 		}
 	}

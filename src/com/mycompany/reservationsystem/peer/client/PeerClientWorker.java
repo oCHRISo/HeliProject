@@ -77,11 +77,11 @@ public class PeerClientWorker extends Thread {
 			
 		}
 		catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		catch(IOException ioException){
-			ioException.printStackTrace();
+			//ioException.printStackTrace();
 		}
 		finally{
 			//Closing connection
@@ -94,7 +94,7 @@ public class PeerClientWorker extends Thread {
 				
 			}
 			catch(IOException ioException){
-				ioException.printStackTrace();
+				//ioException.printStackTrace();
 			}
 		}
 	}
@@ -110,7 +110,7 @@ public class PeerClientWorker extends Thread {
 			out.flush();
 		}
 		catch(IOException ioException){
-			ioException.printStackTrace();
+			//ioException.printStackTrace();
 		}
 	}
 }

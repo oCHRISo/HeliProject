@@ -35,7 +35,7 @@ public class PeerServer extends Thread {
 				pool.execute(new PeerServerWorker(connection));
 			} 
 			catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			finally{
 				//Closing connection
@@ -57,10 +57,10 @@ public class PeerServer extends Thread {
 			socket.close();
 		} 
 		catch (UnknownHostException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} 
 		catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 }

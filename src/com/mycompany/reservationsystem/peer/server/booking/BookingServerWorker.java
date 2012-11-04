@@ -64,10 +64,10 @@ public class BookingServerWorker extends Thread{
 			}
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		finally{
 			//Closing connection
@@ -117,7 +117,7 @@ public class BookingServerWorker extends Thread{
 				out.flush();
 			}
 			catch(IOException ioException){
-				ioException.printStackTrace();
+				//ioException.printStackTrace();
 			}
 		}
 	}
