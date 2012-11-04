@@ -28,7 +28,7 @@ public class PeerStateDeamon extends Thread{
 		while(true){
 			PeerTable peerTable = PeerTable.getInstance();
 			peerTable.connect();
-			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.INACTIVE);
+			ArrayList<Peer> peersByState = peerTable.getAllPeers();
 			peerTable.disconnect();
 			
 			for(Peer peer : peersByState){
