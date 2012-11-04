@@ -80,6 +80,11 @@ public class PeerClientWorker extends Thread {
 		
 		catch(IOException ioException){
 			//ioException.printStackTrace();
+			Peer peer = new Peer();
+			peer = Database.getInstance().findPeerByIpAddress(ipAddress);
+			peer.setState(Peer.STATE.INACTIVE);
+			peer.setEpochTime(new Date().getTime());
+			Database.getInstance().updatePeer(peer);
 		}
 		finally{
 			//Closing connection

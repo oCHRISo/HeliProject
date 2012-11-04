@@ -10,9 +10,9 @@ import java.util.Date;
 
 public class Database {
 	private static Database instance = null;
-	private static Connection connection = null;  
-	private static ResultSet resultSet = null;  
-	private static Statement statement = null;
+	private Connection connection = null;  
+	private ResultSet resultSet = null;  
+	private Statement statement = null;
 	private static final String connectionString = "jdbc:sqlite:data\\peer.db";
     
     
@@ -51,23 +51,26 @@ public class Database {
     
     public synchronized ArrayList<String> getCompanies(){
     	try {
+    		connect();
     		resultSet = statement.executeQuery("SELECT * FROM companies");
     		ArrayList<String> companies = new ArrayList<String>();
     		
     		while(resultSet.next()){
     			companies.add(resultSet.getString("company_name"));
     		}
+    		disconnect();
     		return companies;
     	}
     	catch (Exception e) {  
         e.printStackTrace();
         }
+    	disconnect();
     	return null;
     } 
     
     public synchronized void addBooking(FlightBooking flightBooking){
     	try {
-    		
+    		connect();
     		int isFromCamp;
     		if(flightBooking.isFromCamp()){
     			isFromCamp = 1;
@@ -91,12 +94,14 @@ public class Database {
     				flightBooking.getState().toString() + "')");  
         } 
     	catch (Exception e) {  
-            e.printStackTrace();  
+            e.printStackTrace();
         }
+    	disconnect();
     }
     
     public synchronized ArrayList<FlightBooking> findBookingByEmail(String email){
     	try {
+    		connect();connect();
     		resultSet = statement.executeQuery("SELECT * FROM flightbookings WHERE email = '" + email + "'");
     		
     		ArrayList<FlightBooking> flightSearch = new ArrayList<FlightBooking>();
@@ -138,16 +143,19 @@ public class Database {
         		}
         		flightSearch.add(flight);
     		}
+    		disconnect();
     		return flightSearch;
     	}
     	catch (Exception e) {  
         e.printStackTrace();
         }
+    	disconnect();
     	return null;
     } 
     
     public synchronized ArrayList<FlightBooking> getAllBookings(){
-    	try {    		
+    	try {    	
+    		connect();
 			resultSet = statement.executeQuery("SELECT * FROM flightbookings");
 			
 			ArrayList<FlightBooking> listOfBookings = new ArrayList<FlightBooking>();
@@ -189,16 +197,19 @@ public class Database {
 				
 	    		listOfBookings.add(booking);
 			}
+			disconnect();
 			return listOfBookings;
     	}
     	catch (Exception e) {  
         e.printStackTrace();
         }
+    	disconnect();
     	return null;
     }
     
     public FlightBooking findFlightBooking(long transactionEpoch, String email){
     	try {
+    		connect();
     		resultSet = statement.executeQuery("SELECT * FROM flightbookings WHERE transaction_epoch = " + transactionEpoch + " AND email = '" + email + "'");
     		
     		FlightBooking booking = new FlightBooking();
@@ -239,18 +250,22 @@ public class Database {
         			flight.setState(FlightBooking.STATE.CANCELED);
         		}
     		}
+    		disconnect();
     		return booking;
     	}
     	catch (Exception e) {  
         e.printStackTrace();
         }
+    	disconnect();
     	return null;
     }
     
     public synchronized void addPeer(Peer peer){
     	try {  
+    		connect();
            statement.executeUpdate("INSERT INTO Peers (peer_address, active, last_updated) VALUES ('" + peer.getPeerIpAddress() + 
         		   "', '" + peer.getState().toString() + "', '" + peer.getEpochTime() + "');");  
+           disconnect();
         } 
     	catch (Exception e) {  
             e.printStackTrace();  
@@ -259,8 +274,10 @@ public class Database {
     
     public synchronized void updatePeer(Peer peer){
     	try {
+    		connect();
 			statement.executeUpdate("UPDATE Peers SET active='" + peer.getState().toString() + "', last_updated='" + peer.getEpochTime() +
 					"' WHERE peer_address='" + peer.getPeerIpAddress() + "'");
+			disconnect();
 		} 
     	catch (SQLException e) {
 			e.printStackTrace();
@@ -269,6 +286,7 @@ public class Database {
     
     public synchronized Peer findPeerByIpAddress(String ipAddress){
     	try {
+    		connect();
     		resultSet = statement.executeQuery("SELECT * FROM Peers WHERE peer_address='" + ipAddress + "'");
     		
     		while(resultSet.next()){
@@ -283,19 +301,21 @@ public class Database {
         			peer.setState(Peer.STATE.INACTIVE);
         		}
         		peer.setEpochTime(resultSet.getLong("last_updated"));
-        		
+        		disconnect();
         		return peer;
     		}
     	}
     	catch (Exception e) {  
         e.printStackTrace();
         }
+    	disconnect();
     	return null;
     }
     
     public synchronized ArrayList<Peer> findPeersByState(Peer.STATE state){
     	ArrayList<Peer> listOfPeers = new ArrayList<Peer>();
-    	try {    		
+    	try {   
+    		connect();
     		resultSet = statement.executeQuery("SELECT * FROM Peers WHERE active='" + state.toString() + "'");
     		
     		listOfPeers = new ArrayList<Peer>();
@@ -314,20 +334,22 @@ public class Database {
         		peer.setEpochTime(resultSet.getLong("last_updated"));
         		listOfPeers.add(peer);
     		}
+    		disconnect();
     		return listOfPeers;
     	}
     	catch(NullPointerException e){
-    		
+    		e.printStackTrace();
     	}
     	catch (Exception e) {  
-        e.printStackTrace();
+    		e.printStackTrace();
         }
+    	disconnect();
     	return listOfPeers;
     }
     
     public synchronized ArrayList<Peer> getAllPeers(){
     	try {    		
-    		
+    		connect();
     		resultSet = statement.executeQuery("SELECT * FROM Peers");
     		
     		ArrayList<Peer> listOfPeers = new ArrayList<Peer>();
@@ -346,34 +368,41 @@ public class Database {
         		peer.setEpochTime(resultSet.getLong("last_updated"));
         		listOfPeers.add(peer);
     		}
+    		disconnect();
     		return listOfPeers;
     	}
     	catch (Exception e) {  
         e.printStackTrace();
         }
+    	disconnect();
     	return null;
     }
     
     public synchronized void logPeerInactive(String ipAddress){
+    	connect();
 		Peer peer = findPeerByIpAddress(ipAddress);
 		peer.setState(Peer.STATE.INACTIVE);
 		peer.setEpochTime(new Date().getTime());
 		updatePeer(peer);
+		disconnect();
 	}
     
     public synchronized ArrayList<Integer> getTimes(){
     	try {
+    		connect();
     		resultSet = statement.executeQuery("SELECT * FROM timetable");
     		ArrayList<Integer> times = new ArrayList<Integer>();
     		
     		while(resultSet.next()){
     			times.add(Integer.valueOf(resultSet.getInt("flight_time")));
     		}
+    		disconnect();
     		return times;
     	}
     	catch (Exception e) {  
         e.printStackTrace();
         }
+    	disconnect();
     	return null;
     }  
 }

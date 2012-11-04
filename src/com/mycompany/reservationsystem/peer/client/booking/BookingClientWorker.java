@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Date;
 
 import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
+import com.mycompany.reservationsystem.peer.data.Peer;
 
 public class BookingClientWorker extends Thread{
 	private static final int PORT_NUMBER = 50001;
@@ -65,6 +67,11 @@ public class BookingClientWorker extends Thread{
 		
 		catch(IOException ioException){
 			//ioException.printStackTrace();
+			Peer peer = new Peer();
+			peer = Database.getInstance().findPeerByIpAddress(ipAddress);
+			peer.setState(Peer.STATE.INACTIVE);
+			peer.setEpochTime(new Date().getTime());
+			Database.getInstance().updatePeer(peer);
 		}
 		finally{
 			//Closing connection
