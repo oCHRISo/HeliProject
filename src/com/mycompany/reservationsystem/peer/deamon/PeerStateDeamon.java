@@ -3,6 +3,7 @@ package com.mycompany.reservationsystem.peer.deamon;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 import com.mycompany.reservationsystem.peer.data.Peer;
 import com.mycompany.reservationsystem.peer.data.PeerTable;
@@ -58,7 +59,12 @@ public class PeerStateDeamon extends Thread{
 					e.printStackTrace();
 				}
 			}
-			yield();
+			
+			try {
+				sleep(new Random().nextInt(10000));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
