@@ -30,6 +30,7 @@ public class PeerStateDeamon extends Thread{
 			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.INACTIVE);
 			peerTable.disconnect();
+			
 			for(Peer peer : peersByState){
 				try 
 				{
@@ -43,6 +44,11 @@ public class PeerStateDeamon extends Thread{
 					}
 					else{
 						System.out.println("Can't find " + peer.getPeerIpAddress().trim());
+						peerTable.connect();
+						peer.setState(Peer.STATE.INACTIVE);
+						peer.setEpochTime(new Date().getTime());
+						peerTable.updatePeer(peer);
+						peerTable.disconnect();
 					}
 				} 
 				catch(NullPointerException e){

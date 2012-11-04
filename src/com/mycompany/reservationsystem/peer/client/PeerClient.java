@@ -1,6 +1,7 @@
 package com.mycompany.reservationsystem.peer.client;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -36,6 +37,14 @@ public class PeerClient extends Thread{
 				}
 				catch(NullPointerException e){
 					
+				}
+			}
+			else{
+				try {
+					sleep(new Random().nextInt(500));
+				} 
+				catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 			yield();

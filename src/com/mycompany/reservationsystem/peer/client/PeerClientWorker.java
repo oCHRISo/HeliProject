@@ -78,22 +78,10 @@ public class PeerClientWorker extends Thread {
 		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			yield();
-			PeerTable peerTable = PeerTable.getInstance();
-			peerTable.connect();
-			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
-			peerTable.disconnect();
-			yield();
 		}
 		
 		catch(IOException ioException){
 			ioException.printStackTrace();
-			yield();
-			PeerTable peerTable = PeerTable.getInstance();
-			peerTable.connect();
-			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
-			peerTable.disconnect();
-			yield();
 		}
 		finally{
 			//Closing connection
@@ -107,12 +95,6 @@ public class PeerClientWorker extends Thread {
 			}
 			catch(IOException ioException){
 				ioException.printStackTrace();
-				yield();
-				PeerTable peerTable = PeerTable.getInstance();
-				peerTable.connect();
-				peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
-				peerTable.disconnect();
-				yield();
 			}
 		}
 	}
@@ -129,12 +111,6 @@ public class PeerClientWorker extends Thread {
 		}
 		catch(IOException ioException){
 			ioException.printStackTrace();
-			yield();
-			PeerTable peerTable = PeerTable.getInstance();
-			peerTable.connect();
-			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
-			peerTable.disconnect();
-			yield();
 		}
 	}
 }

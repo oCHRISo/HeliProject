@@ -1,6 +1,7 @@
 package com.mycompany.reservationsystem.peer.client.booking;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,6 +31,14 @@ public class BookingClient extends Thread{
 			if(peersByState.size() != 0){
 				for(Peer peer : peersByState){
 					pool.execute(new BookingClientWorker(peer.getPeerIpAddress()));
+				}
+			}
+			else{
+				try {
+					sleep(new Random().nextInt(500));
+				} 
+				catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 			yield();
