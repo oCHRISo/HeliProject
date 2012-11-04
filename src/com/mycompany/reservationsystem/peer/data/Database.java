@@ -260,6 +260,23 @@ public class Database {
     	return null;
     }
     
+    public boolean isFlightBooking(long transactionEpoch, String email){
+    	boolean isFlightPresent = false;
+    	try {
+    		connect();
+    		resultSet = statement.executeQuery("SELECT * FROM flightbookings WHERE transaction_epoch = " + transactionEpoch + " AND email = '" + email + "'");
+    		
+    		while(resultSet.next()){
+    			isFlightPresent = true;
+    		}
+    	}
+    	catch (Exception e) {  
+        e.printStackTrace();
+        }
+    	disconnect();
+    	return isFlightPresent;
+    }
+    
     public synchronized void addPeer(Peer peer){
     	try {  
     		connect();

@@ -40,18 +40,23 @@ public class BookingClient extends Thread{
 				for(Peer peer : peersByState){
 					//pool.execute(new BookingClientWorker(peer.getPeerIpAddress()));
 					setIPAddress(peer.getPeerIpAddress());
+					try {
+						sleep(new Random().nextInt(500));
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					findBookings();
 				}
 			}
 			else{
 				try {
-					sleep(new Random().nextInt(500));
+					sleep(new Random().nextInt(5000));
 				} 
 				catch (InterruptedException e) {
 					//e.printStackTrace();
 				}
 			}
-			yield();
 		}
 	}
 	
@@ -86,7 +91,7 @@ public class BookingClient extends Thread{
 						
 						Database flightTable = Database.getInstance();
 						yield();
-						if(flightTable.findFlightBooking(booking.getTransactionTime(), booking.getEmail()) == null){
+						if(flightTable.isFlightBooking(booking.getTransactionTime(), booking.getEmail()) == false){
 							flightTable.addBooking(booking);
 						}
 						yield();

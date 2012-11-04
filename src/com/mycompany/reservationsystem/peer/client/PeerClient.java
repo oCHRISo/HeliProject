@@ -43,18 +43,23 @@ public class PeerClient extends Thread{
 					//set IP address
 					setIPAddress(peer.getPeerIpAddress());
 					//find other peer from a peer
+					try {
+						sleep(new Random().nextInt(500));
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					findPeers();
 				}
 			}
 			else{
 				try {
-					sleep(new Random().nextInt(10000));
+					sleep(new Random().nextInt(5000));
 				} 
 				catch (InterruptedException e) {
 					//e.printStackTrace();
 				}
 			}
-			yield();
 		}
 	}
 	
@@ -75,6 +80,7 @@ public class PeerClient extends Thread{
 				sendMessage(CommunicationMessages.IP_REQUEST);
 				
 				String message = (String) in.readObject();
+				System.out.println("Got message " + message);
 				if(message.startsWith(CommunicationMessages.IP_RESPONSE.toString())){
 					/*
 					 * Message with no ip address shows that server has given all ip address, 
