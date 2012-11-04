@@ -8,7 +8,6 @@ import java.net.Socket;
 import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
 import com.mycompany.reservationsystem.peer.data.FlightBookingTable;
-import com.mycompany.reservationsystem.peer.data.PeerTable;
 
 public class BookingClientWorker extends Thread{
 	private static final int PORT_NUMBER = 50001;
@@ -64,22 +63,10 @@ public class BookingClientWorker extends Thread{
  		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			PeerTable peerTable = PeerTable.getInstance();
-			yield();
-			peerTable.connect();
-			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
-			peerTable.disconnect();
-			yield();
 		}
 		
 		catch(IOException ioException){
 			ioException.printStackTrace();
-			PeerTable peerTable = PeerTable.getInstance();
-			yield();
-			peerTable.connect();
-			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
-			peerTable.disconnect();
-			yield();
 		}
 		finally{
 			//Closing connection
@@ -90,12 +77,6 @@ public class BookingClientWorker extends Thread{
 			}
 			catch(IOException ioException){
 				ioException.printStackTrace();
-				PeerTable peerTable = PeerTable.getInstance();
-				yield();
-				peerTable.connect();
-				peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
-				peerTable.disconnect();
-				yield();
 			}
 			catch (NullPointerException e) {
 			}
@@ -114,12 +95,6 @@ public class BookingClientWorker extends Thread{
 		}
 		catch(IOException ioException){
 			ioException.printStackTrace();
-			PeerTable peerTable = PeerTable.getInstance();
-			yield();
-			peerTable.connect();
-			peerTable.logPeerInactive(ipAddress); //Log that this peer ip address is inactive
-			peerTable.disconnect();
-			yield();
 		}
 	}
  	
