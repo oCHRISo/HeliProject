@@ -10,7 +10,7 @@ public class ServerTestClass {
 		PeerStateDeamon peerDeamon = new PeerStateDeamon();
 		PeerServer peerServer = new PeerServer();
 		BookingServer bookingServer = new BookingServer();
-		
+        
 		peerDeamon.start();
 		peerServer.start();
 		bookingServer.start();

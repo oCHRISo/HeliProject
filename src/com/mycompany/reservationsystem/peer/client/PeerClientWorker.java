@@ -73,6 +73,8 @@ public class PeerClientWorker extends Thread {
 					
 				}
 			}
+			
+			
 		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -99,6 +101,9 @@ public class PeerClientWorker extends Thread {
 				in.close();
 				out.close();
 				requestSocket.close();
+			}
+			catch(NullPointerException e){
+				
 			}
 			catch(IOException ioException){
 				ioException.printStackTrace();

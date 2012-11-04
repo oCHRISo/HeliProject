@@ -20,16 +20,12 @@ public class BookingClient extends Thread{
 		while(true){
 			System.out.println("BookingClient");
 			PeerTable peerTable = PeerTable.getInstance();
-			yield();
 			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
 			peerTable.disconnect();
-			yield();
 			for(Peer peer : peersByState){
 				BookingClientWorker bookingWorker = new BookingClientWorker(peer.getPeerIpAddress());
-				bookingWorker.setPriority(MAX_PRIORITY);
 				new Thread(bookingWorker).start();
-				yield();
 			}
 			yield();
 		}

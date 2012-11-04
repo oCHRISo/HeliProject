@@ -27,11 +27,9 @@ public class PeerStateDeamon extends Thread{
 	public void run(){
 		while(true){
 			PeerTable peerTable = PeerTable.getInstance();
-			yield();
 			peerTable.connect();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.INACTIVE);
 			peerTable.disconnect();
-			yield();
 			System.out.println("Deamon Running");
 			for(Peer peer : peersByState){
 				try 
@@ -47,18 +45,11 @@ public class PeerStateDeamon extends Thread{
 					else{
 						System.out.println("Can't find " + peer.getPeerIpAddress().trim());
 					}
-					yield();
 				} 
 				catch(NullPointerException e){
 					
 				}
 				catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
-					sleep(60000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

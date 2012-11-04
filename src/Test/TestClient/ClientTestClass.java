@@ -1,19 +1,22 @@
 package Test.TestClient;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.mycompany.reservationsystem.peer.client.PeerClient;
 import com.mycompany.reservationsystem.peer.client.booking.BookingClient;
 import com.mycompany.reservationsystem.peer.deamon.PeerStateDeamon;
 
 public class ClientTestClass {
-	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		PeerStateDeamon peerDeamon = new PeerStateDeamon();
 		PeerClient peerClient = new PeerClient();
 		BookingClient bookingClient = new BookingClient();
 		
-		peerDeamon.start();
-		peerClient.start();
-		bookingClient.start();
+		ExecutorService pool = Executors.newFixedThreadPool(3);
+		pool.execute(peerDeamon);
+		pool.execute(peerClient);
+		pool.execute(bookingClient);
 		
 		try {
 			System.out.println("Hello");
@@ -24,8 +27,6 @@ public class ClientTestClass {
 			e.printStackTrace();
 		}
 		
-		peerDeamon.stop();
-		peerClient.stop();
-		bookingClient.stop();
+		pool.shutdown();
 	}
 }
