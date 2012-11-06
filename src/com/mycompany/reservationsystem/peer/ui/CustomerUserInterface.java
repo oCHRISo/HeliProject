@@ -3,16 +3,17 @@ package com.mycompany.reservationsystem.peer.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 
-public class CustomerUserInterface extends Thread{
-	
-	
-	public void run(){
+import com.mycompany.reservationsystem.peer.data.Database;
+import com.mycompany.reservationsystem.peer.data.FlightBooking;
+
+public class CustomerUserInterface{
+	public void showOptions(){
 		System.out.println("Please select an option:\n1 For adding a booking\n2 For canceling a booking\n3 To view booking\n4 To exit");
 		String option = readLine();
 		
 		boolean keepRunning = true;
-		
 		do{
 			if(option.equals("1")){
 				addBookingOption();
@@ -56,14 +57,48 @@ public class CustomerUserInterface extends Thread{
 		System.out.println("Please enter in your time you wish to fly (Format 24 hour, all fights leave on hour or half of the hour):");
 		String time = readLine();
 		
-		System.out.println("Please enter where you would like to fly to:\1 For the city\n2 For the camp");
+		System.out.println("Please enter where you would like to fly to:\n1 For the city\n2 For the camp");
 		String toOption = readLine();
 		
-		System.out.println("Please enter where you are flying from:\1 From the city\n2 From the camp");
+		System.out.println("Please enter where you are flying from:\n1 From the city\n2 From the camp");
 		String fromOption = readLine();
 		
-		//TODO Add the booking to the database and tell user it is added
+		FlightBooking flightBooking = new FlightBooking();
+		flightBooking.setTransactionTime(new Date().getTime());
+		flightBooking.setEmail(email);
 		
+		String flightDateTime = date + "@" + time;
+		
+		if(toOption.equals("1")){ //Customer wants to go to the city
+			flightBooking.setFlightToCityAt(flightDateTime);
+			flightBooking.setFlightToCampAt("NA");
+			
+		}
+		else if(toOption.equals("2")){ //Customer wants to go to the camp
+			flightBooking.setFlightToCityAt("NA");
+			flightBooking.setFlightToCampAt(flightDateTime);
+		}
+		else{
+			System.out.println("Uknown option");
+		}
+		
+		if(fromOption.equals("1")){
+			flightBooking.setFromCamp(false);
+			flightBooking.setFromCity(true);
+		}
+		else if(fromOption.equals("2")){
+			flightBooking.setFromCamp(true);
+			flightBooking.setFromCity(false);
+		}
+		else{
+			System.out.println("Uknown option");
+		}
+		flightBooking.setPrice(0.0);
+		flightBooking.setState(FlightBooking.STATE.REQUESTED);
+		
+		Database.getInstance().addBooking(flightBooking);
+		
+		System.out.println("Booking Added!");
 	}
 	
 	private void cancelBookingOption(){
