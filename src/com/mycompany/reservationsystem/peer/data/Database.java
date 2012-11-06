@@ -364,12 +364,12 @@ public class Database {
     }
     
     public synchronized Peer findPeerByIpAddress(String ipAddress){
+    	Peer peer = new Peer();
     	try {
     		connect();
     		resultSet = statement.executeQuery("SELECT * FROM Peers WHERE peer_address='" + ipAddress + "'");
     		
     		while(resultSet.next()){
-    			Peer peer = new Peer();
         		peer.setPeerIpAddress(resultSet.getString("peer_address"));
         		
         		if(resultSet.getInt("active") == 1)
@@ -388,7 +388,7 @@ public class Database {
     		e.printStackTrace();
         }
     	disconnect();
-    	return null;
+    	return peer;
     }
     
     public synchronized ArrayList<Peer> findPeersByState(Peer.STATE state){

@@ -52,6 +52,7 @@ public class PeerClientWorker extends Thread {
 					 * Message with no ip address shows that server has given all ip address, 
 					 * server will return IP_RESPONSE: (12 chars)
 					 */
+					System.out.println("Got message " + message);
 					if(message.length() != 12){
 						String ipAddress = message.substring(message.indexOf(":")+1, message.length());
 						
@@ -66,7 +67,6 @@ public class PeerClientWorker extends Thread {
 					else{
 						isFinished = true;
 					}
-					
 				}
 			}
 			
