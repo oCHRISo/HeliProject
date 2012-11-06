@@ -111,7 +111,7 @@ public class Database {
     
     public synchronized ArrayList<FlightBooking> findBookingByEmail(String email){
     	try {
-    		connect();connect();
+    		connect();
     		resultSet = statement.executeQuery("SELECT * FROM flightbookings WHERE email = '" + email + "'");
     		
     		ArrayList<FlightBooking> flightSearch = new ArrayList<FlightBooking>();
@@ -161,7 +161,61 @@ public class Database {
         }
     	disconnect();
     	return null;
-    } 
+    }
+    
+    public synchronized ArrayList<FlightBooking> findBooking(String email, FlightBooking.STATE state){
+    	ArrayList<FlightBooking> flightSearch = new ArrayList<FlightBooking>();
+    	try {
+    		connect();
+    		resultSet = statement.executeQuery("SELECT * FROM flightbookings WHERE email = '" + email + "' " +
+    				"AND state = '" + state.toString() + "'");
+    		
+    		while(resultSet.next()){
+    			FlightBooking flight = new FlightBooking();
+        		flight.setTransactionTime(resultSet.getLong("transaction_epoch"));
+        		flight.setEmail(resultSet.getString("email"));
+        		flight.setFlightToCityAt(resultSet.getString("flight_to_city_at"));
+        		flight.setFlightToCampAt(resultSet.getString("flight_to_camp_at"));
+        		
+        		if(resultSet.getInt("from_city") == 1){
+        			flight.setFromCity(true);
+        		}
+        		else{
+        			flight.setFromCity(false);
+        		}
+        		
+        		if(resultSet.getInt("from_camp") == 1){
+        			flight.setFromCamp(true);
+        		}
+        		else{
+        			flight.setFromCamp(false);
+        		}
+        		
+        		flight.setPrice(resultSet.getDouble("price"));
+        		
+        		if(resultSet.getString("state").equals(FlightBooking.STATE.REQUESTED.toString())){
+        			flight.setState(FlightBooking.STATE.REQUESTED);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
+        			flight.setState(FlightBooking.STATE.CONFIRMED);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
+        			flight.setState(FlightBooking.STATE.CANCEL);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCELED.toString())){
+        			flight.setState(FlightBooking.STATE.CANCELED);
+        		}
+        		flightSearch.add(flight);
+    		}
+    		disconnect();
+    		return flightSearch;
+    	}
+    	catch (Exception e) {  
+        e.printStackTrace();
+        }
+    	disconnect();
+    	return flightSearch;
+    }
     
     public synchronized ArrayList<FlightBooking> getAllBookings(){
     	try {    	

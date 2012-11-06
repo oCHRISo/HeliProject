@@ -3,6 +3,7 @@ package com.mycompany.reservationsystem.peer.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.mycompany.reservationsystem.peer.data.Database;
@@ -10,11 +11,11 @@ import com.mycompany.reservationsystem.peer.data.FlightBooking;
 
 public class CustomerUserInterface{
 	public void showOptions(){
-		System.out.println("Please select an option:\n1 For adding a booking\n2 For canceling a booking\n3 To view booking\n4 To exit");
-		String option = readLine();
-		
 		boolean keepRunning = true;
 		do{
+			System.out.println("Please select an option:\n1 For adding a booking\n2 For canceling a booking\n3 To view booking\n4 To exit");
+			String option = readLine();
+			
 			if(option.equals("1")){
 				addBookingOption();
 			}
@@ -106,11 +107,35 @@ public class CustomerUserInterface{
 		String email = readLine();
 		
 		//TODO Show all confirmed bookings for the email address
+		ArrayList<FlightBooking> confirmedList = Database.getInstance().findBooking(email, FlightBooking.STATE.CONFIRMED);
 		
-		System.out.println("Please select one of the confirmed bookings that you wish to cancel:");
-		String calcelOption = readLine();
-		
-		//TODO Add transaction to cancel the booking
+		if(confirmedList.size() == 0){
+			System.out.println("No confirmed flights");
+		}
+		else{
+			System.out.println("Flight to camp at\tFlight to city at\tFrom Camp\tFrom City\tPrice\tState");
+			for(int i = 0; i < confirmedList.size(); i++){
+				System.out.println(i + " " + confirmedList.get(i).getFlightToCampAt() + "\t\t\t" + confirmedList.get(i).getFlightToCityAt() + "\t\t" +
+						confirmedList.get(i).isFromCamp() + "\t\t" + confirmedList.get(i).isFromCity() + "\t\t" + confirmedList.get(i).getPrice() +
+						"\t" + confirmedList.get(i).getState().toString());
+			}
+			System.out.println("Please select one of the confirmed bookings that you wish to cancel:");
+			int calcelOption = Integer.parseInt(readLine());
+			
+			//TODO Add transaction to cancel the booking
+			FlightBooking cancelFlight = new FlightBooking();
+			cancelFlight.setTransactionTime(new Date().getTime());
+			cancelFlight.setEmail(confirmedList.get(calcelOption).getEmail());
+			cancelFlight.setFlightToCampAt(confirmedList.get(calcelOption).getFlightToCampAt());
+			cancelFlight.setFlightToCityAt(confirmedList.get(calcelOption).getFlightToCityAt());
+			cancelFlight.setFromCamp(confirmedList.get(calcelOption).isFromCamp());
+			cancelFlight.setFromCity(confirmedList.get(calcelOption).isFromCity());
+			cancelFlight.setPrice(confirmedList.get(calcelOption).getPrice());
+			cancelFlight.setState(FlightBooking.STATE.CANCEL);
+			
+			Database.getInstance().addBooking(cancelFlight);
+			System.out.println("Booking has been requested to be canceled!");
+		}
 	}
 	
 	private void viewBookingOption(){
@@ -118,6 +143,13 @@ public class CustomerUserInterface{
 		
 		String email = readLine();
 		
-		//TODO Seach all transaction for email address
+		ArrayList<FlightBooking> bookingsByEmail = Database.getInstance().findBookingByEmail(email);
+		
+		System.out.println("Flight to camp at\tFlight to city at\tFrom Camp\tFrom City\tPrice\tState");
+		for(FlightBooking flightBooking : bookingsByEmail){
+			System.out.println(flightBooking.getFlightToCampAt() + "\t\t\t" + flightBooking.getFlightToCityAt() + "\t\t" +
+					flightBooking.isFromCamp() + "\t\t" + flightBooking.isFromCity() + "\t\t" + flightBooking.getPrice() +
+					"\t" + flightBooking.getState().toString());
+		}
 	}
 }

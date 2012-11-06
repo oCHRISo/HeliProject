@@ -1,7 +1,7 @@
 package com.mycompany.reservationsystem.peer.data;
 
 public class FlightBooking {
-public enum STATE{REQUESTED, CONFIRMED, CANCEL, CANCELED};
+public enum STATE{REQUESTED, CONFIRMED, REJECTED, CANCEL, CANCELED};
 	
 	private long transactionTime;
 	private String email;
