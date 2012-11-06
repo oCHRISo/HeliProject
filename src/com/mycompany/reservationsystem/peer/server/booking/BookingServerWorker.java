@@ -39,6 +39,7 @@ public class BookingServerWorker extends Thread{
 	}
 	
 	public void run(){
+		System.out.println("Booking server running");
 		Database bookingTable = Database.getInstance();
 		bookingList = bookingTable.getAllBookings();
 		
@@ -62,10 +63,10 @@ public class BookingServerWorker extends Thread{
 			}
 		}
 		catch (IOException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		finally{
 			//Closing connection
@@ -75,7 +76,7 @@ public class BookingServerWorker extends Thread{
 				connection.close();
 			}
 			catch(IOException ioException){
-				//ioException.printStackTrace();
+				ioException.printStackTrace();
 			}
 		}
 	}

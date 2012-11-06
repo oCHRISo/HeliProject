@@ -29,7 +29,7 @@ public class PeerServer extends Thread {
 				serverSocket = new ServerSocket(PORT_NUMBER);
 				Socket connection = serverSocket.accept();
 				//Spawn new thread for client
-				new PeerServerWorker(connection);
+				new PeerServerWorker(connection).start();
 			} 
 			catch (IOException e) {
 				//e.printStackTrace();
