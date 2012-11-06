@@ -31,7 +31,5 @@ public class PeerTestClass {
 		
 		peerServer.close();
 		bookingServer.close();
-		
-		
 	}
 }

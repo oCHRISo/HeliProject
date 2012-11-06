@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.Database;
@@ -30,7 +29,6 @@ public class BookingClient extends Thread{
 	private ObjectInputStream in;
  	private String ipAddress;
  	private boolean isFinished;
-	//private ExecutorService pool = Executors.newFixedThreadPool(10);
 	
 	public void run(){
 		while(true){
@@ -38,20 +36,13 @@ public class BookingClient extends Thread{
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
 			if(peersByState.size() != 0){
 				for(Peer peer : peersByState){
-					//pool.execute(new BookingClientWorker(peer.getPeerIpAddress()));
 					setIPAddress(peer.getPeerIpAddress());
-					try {
-						sleep(new Random().nextInt(500));
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					findBookings();
 				}
 			}
 			else{
 				try {
-					sleep(new Random().nextInt(2000));
+					sleep(1000*3);
 				} 
 				catch (InterruptedException e) {
 					//e.printStackTrace();
@@ -90,11 +81,9 @@ public class BookingClient extends Thread{
 						FlightBooking booking = parseBookingMessage(dataPartOfMessage);
 						
 						Database flightTable = Database.getInstance();
-						yield();
 						if(flightTable.isFlightBooking(booking.getTransactionTime(), booking.getEmail()) == false){
 							flightTable.addBooking(booking);
 						}
-						yield();
 					}
 					else{ //Got blank booking
 						isFinished = true;

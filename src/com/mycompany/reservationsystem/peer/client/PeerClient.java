@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.Database;
@@ -29,7 +28,6 @@ public class PeerClient extends Thread{
 	private ObjectInputStream in;
 	private String ipAddress;
  	private boolean isFinished;
-	//private ExecutorService pool = Executors.newFixedThreadPool(10);
 	
 	public void run(){
 		while(true){
@@ -39,22 +37,15 @@ public class PeerClient extends Thread{
 			
 			if(peersByState.size() != 0){
 				for(Peer peer : peersByState){
-					//pool.execute(new PeerClientWorker());
 					//set IP address
 					setIPAddress(peer.getPeerIpAddress());
 					//find other peer from a peer
-					try {
-						sleep(new Random().nextInt(500));
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					findPeers();
 				}
 			}
 			else{
 				try {
-					sleep(new Random().nextInt(2000));
+					sleep(1000*3);
 				} 
 				catch (InterruptedException e) {
 					//e.printStackTrace();
@@ -90,14 +81,12 @@ public class PeerClient extends Thread{
 						String ipAddress = message.substring(message.indexOf(":")+1, message.length());
 						
 						Database peerTable = Database.getInstance();
-						yield();
 						//Check if ip address is present, if ip address isn't present then will return null
 						if(peerTable.findPeerByIpAddress(ipAddress) == null){
 							//Add ip address to DB
 							Peer newPeer = new Peer(ipAddress,Peer.STATE.INACTIVE, new Date().getTime());
 							peerTable.addPeer(newPeer);
 						}
-						yield();
 					}
 					else{
 						isFinished = true;
