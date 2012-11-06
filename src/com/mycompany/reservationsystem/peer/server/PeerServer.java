@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /*
  * Peer server thread giving known ip address to clients
@@ -24,7 +22,6 @@ import java.util.concurrent.Executors;
 public class PeerServer extends Thread {
 	private static final int PORT_NUMBER = 50000;
 	private ServerSocket serverSocket;
-	private ExecutorService pool = Executors.newFixedThreadPool(50);
 	
 	public void run(){
 		while(true){
@@ -32,7 +29,7 @@ public class PeerServer extends Thread {
 				serverSocket = new ServerSocket(PORT_NUMBER);
 				Socket connection = serverSocket.accept();
 				//Spawn new thread for client
-				pool.execute(new PeerServerWorker(connection));
+				new PeerServerWorker(connection);
 			} 
 			catch (IOException e) {
 				//e.printStackTrace();
@@ -54,7 +51,6 @@ public class PeerServer extends Thread {
 		try {
 			Socket socket = new Socket("127.0.0.1",PORT_NUMBER);
 			socket.close();
-			pool.shutdown();
 		} 
 		catch (UnknownHostException e) {
 			//e.printStackTrace();

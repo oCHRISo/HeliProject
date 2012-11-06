@@ -3,7 +3,6 @@ package com.mycompany.reservationsystem.peer.deamon;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.Peer;
@@ -49,8 +48,9 @@ public class PeerStateDeamon extends Thread{
 				}
 			}
 			
+			//Make thread sleep every 30 seconds
 			try {
-				sleep(new Random().nextInt(1000*10));
+				sleep(1000*30);
 			} 
 			catch (InterruptedException e) {
 				

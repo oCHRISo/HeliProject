@@ -1,8 +1,5 @@
 package Test.TestClient;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.mycompany.reservationsystem.peer.client.PeerClient;
 import com.mycompany.reservationsystem.peer.client.booking.BookingClient;
 import com.mycompany.reservationsystem.peer.deamon.PeerStateDeamon;
@@ -17,12 +14,11 @@ public class PeerTestClass {
 		PeerServer peerServer = new PeerServer();
 		BookingServer bookingServer = new BookingServer();
 		
-		ExecutorService pool = Executors.newFixedThreadPool(5);
-		pool.execute(peerDeamon);
-		pool.execute(peerClient);
-		pool.execute(bookingClient);
-		pool.execute(peerServer);
-		pool.execute(bookingServer);
+		peerDeamon.start();
+		peerClient.start();
+		bookingClient.start();
+		peerServer.start();
+		bookingServer.start();
 		
 		try {
 			System.out.println("Hello");
@@ -35,6 +31,7 @@ public class PeerTestClass {
 		
 		peerServer.close();
 		bookingServer.close();
-		pool.shutdown();
+		
+		
 	}
 }

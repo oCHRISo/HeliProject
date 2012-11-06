@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.Database;
@@ -49,13 +48,6 @@ public class PeerServerWorker extends Thread{
 			in = new ObjectInputStream(connection.getInputStream());
 			
 			String message = null;
-			
-			try {
-				sleep(new Random().nextInt(1500));
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			while(isFinished() == false){
 				message = (String)in.readObject();
