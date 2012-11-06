@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Date;
+
+import com.mycompany.reservationsystem.peer.data.Database;
+import com.mycompany.reservationsystem.peer.data.Peer;
 
 /*
  * Peer server thread giving known ip address to clients
@@ -28,6 +32,13 @@ public class PeerServer extends Thread {
 			try {
 				serverSocket = new ServerSocket(PORT_NUMBER);
 				Socket connection = serverSocket.accept();
+				//Recording what IP address connected to the peer server
+				String ipAddress = connection.getInetAddress().toString();
+				ipAddress = ipAddress.substring(1);
+				Peer newPeer = new Peer(ipAddress,Peer.STATE.INACTIVE, new Date().getTime());
+				Database.getInstance().addPeer(newPeer);
+				
+				System.out.println("Peer address that connected " + ipAddress);
 				//Spawn new thread for client
 				new PeerServerWorker(connection).start();
 			} 
