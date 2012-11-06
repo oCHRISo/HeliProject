@@ -36,7 +36,6 @@ public class BookingClientWorker extends Thread{
 				sendMessage(CommunicationMessages.TRANSACTION_REQUEST);
 				
 				String message = (String) in.readObject();
-				System.out.println("Got message " + message);
 				if(message.startsWith(CommunicationMessages.TRANSACTION_RESPONSE.toString())){
 					/*
 					 * Message with no booking shows that server has given all bookings, 
@@ -46,14 +45,19 @@ public class BookingClientWorker extends Thread{
 					
 					if(message.length() != 21){ //Got a booking
 						String dataPartOfMessage = message.substring(message.indexOf(":")+1, message.length());
+						
+						//Flight booking that was sent from another peer
 						FlightBooking booking = parseBookingMessage(dataPartOfMessage);
 						
-						Database flightTable = Database.getInstance();
-						yield();
-						if(flightTable.findFlightBooking(booking.getTransactionTime(), booking.getEmail()) == null){
-							flightTable.addBooking(booking);
+						//Trying to find the same booking within this peers DB 
+						FlightBooking flightBookingFromDatabase = Database.getInstance().findFlightBooking(booking.getTransactionTime(),
+								booking.getEmail());
+						
+						//If the booking from another peer is not equal to any of this peers booking then save the booking
+						if(!(booking.getTransactionTime() == flightBookingFromDatabase.getTransactionTime() &&
+								booking.getEmail().equals(flightBookingFromDatabase.getEmail()))){
+							Database.getInstance().addBooking(booking);
 						}
-						yield();
 					}
 					else{ //Got blank booking
 						isFinished = true;
@@ -62,11 +66,11 @@ public class BookingClientWorker extends Thread{
 			}
  		}
 		catch (ClassNotFoundException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		catch(IOException ioException){
-			//ioException.printStackTrace();
+			ioException.printStackTrace();
 			Peer peer = new Peer();
 			peer = Database.getInstance().findPeerByIpAddress(ipAddress);
 			peer.setState(Peer.STATE.INACTIVE);
@@ -81,7 +85,7 @@ public class BookingClientWorker extends Thread{
 				requestSocket.close();
 			}
 			catch(IOException ioException){
-				//ioException.printStackTrace();
+				ioException.printStackTrace();
 			}
 			catch (NullPointerException e) {
 			}
@@ -99,7 +103,7 @@ public class BookingClientWorker extends Thread{
 			out.flush();
 		}
 		catch(IOException ioException){
-			//ioException.printStackTrace();
+			ioException.printStackTrace();
 		}
 	}
  	

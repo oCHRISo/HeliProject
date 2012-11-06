@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.mycompany.reservationsystem.peer.client.PeerClient;
+import com.mycompany.reservationsystem.peer.client.booking.BookingClient;
 import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.Peer;
 
@@ -48,9 +50,12 @@ public class PeerStateDeamon extends Thread{
 				}
 			}
 			
+			new PeerClient().start();
+			new BookingClient().start();
+			
 			//Make thread sleep every 30 seconds
 			try {
-				sleep(1000*30);
+				sleep(1000*60);
 			} 
 			catch (InterruptedException e) {
 				

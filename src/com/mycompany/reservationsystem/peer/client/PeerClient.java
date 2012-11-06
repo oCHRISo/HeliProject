@@ -30,26 +30,17 @@ public class PeerClient extends Thread{
  	private boolean isFinished;
 	
 	public void run(){
-		while(true){
-			//System.out.println("PeerClient");
-			Database peerTable = Database.getInstance();
-			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
-			
-			if(peersByState.size() != 0){
-				for(Peer peer : peersByState){
-					//set IP address
-					setIPAddress(peer.getPeerIpAddress());
-					//find other peer from a peer
-					findPeers();
-				}
-			}
-			else{
-				try {
-					sleep(1000*3);
-				} 
-				catch (InterruptedException e) {
-					//e.printStackTrace();
-				}
+		//System.out.println("PeerClient");
+		Database peerTable = Database.getInstance();
+		ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
+		
+		if(peersByState.size() != 0){
+			for(Peer peer : peersByState){
+				//set IP address
+				//setIPAddress(peer.getPeerIpAddress());
+				//find other peer from a peer
+				//findPeers();
+				new PeerClientWorker(peer.getPeerIpAddress()).start();
 			}
 		}
 	}
@@ -98,11 +89,11 @@ public class PeerClient extends Thread{
 			
 		}
 		catch (ClassNotFoundException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		catch(IOException ioException){
-			//ioException.printStackTrace();
+			ioException.printStackTrace();
 			Peer peer = new Peer();
 			peer = Database.getInstance().findPeerByIpAddress(ipAddress);
 			peer.setState(Peer.STATE.INACTIVE);
@@ -120,7 +111,7 @@ public class PeerClient extends Thread{
 				
 			}
 			catch(IOException ioException){
-				//ioException.printStackTrace();
+				ioException.printStackTrace();
 			}
 		}
 	}
@@ -136,7 +127,7 @@ public class PeerClient extends Thread{
 			out.flush();
 		}
 		catch(IOException ioException){
-			//ioException.printStackTrace();
+			ioException.printStackTrace();
 		}
 	}
 }

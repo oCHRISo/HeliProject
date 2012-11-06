@@ -271,7 +271,7 @@ public class Database {
     	return null;
     }
     
-    public FlightBooking findFlightBooking(long transactionEpoch, String email){
+    public synchronized FlightBooking findFlightBooking(long transactionEpoch, String email){
     	FlightBooking booking = new FlightBooking();
     	try {
     		connect();
@@ -322,7 +322,7 @@ public class Database {
     	return booking;
     }
     
-    public boolean isFlightBooking(long transactionEpoch, String email){
+    public synchronized boolean isFlightBooking(long transactionEpoch, String email){
     	boolean isFlightPresent = false;
     	try {
     		connect();
@@ -385,7 +385,7 @@ public class Database {
     		}
     	}
     	catch (Exception e) {  
-        e.printStackTrace();
+    		e.printStackTrace();
         }
     	disconnect();
     	return null;

@@ -31,22 +31,14 @@ public class BookingClient extends Thread{
  	private boolean isFinished;
 	
 	public void run(){
-		while(true){
-			Database peerTable = Database.getInstance();
-			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
-			if(peersByState.size() != 0){
-				for(Peer peer : peersByState){
-					setIPAddress(peer.getPeerIpAddress());
-					findBookings();
-				}
-			}
-			else{
-				try {
-					sleep(1000*3);
-				} 
-				catch (InterruptedException e) {
-					//e.printStackTrace();
-				}
+		Database peerTable = Database.getInstance();
+		
+		ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.ACTIVE);
+		if(peersByState.size() != 0){
+			for(Peer peer : peersByState){
+				new BookingClientWorker(peer.getPeerIpAddress()).start();
+				//setIPAddress(peer.getPeerIpAddress());
+				//findBookings();
 			}
 		}
 	}
@@ -92,11 +84,11 @@ public class BookingClient extends Thread{
 			}
  		}
 		catch (ClassNotFoundException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		catch(IOException ioException){
-			//ioException.printStackTrace();
+			ioException.printStackTrace();
 			Peer peer = new Peer();
 			peer = Database.getInstance().findPeerByIpAddress(ipAddress);
 			peer.setState(Peer.STATE.INACTIVE);
@@ -111,7 +103,7 @@ public class BookingClient extends Thread{
 				requestSocket.close();
 			}
 			catch(IOException ioException){
-				//ioException.printStackTrace();
+				ioException.printStackTrace();
 			}
 			catch (NullPointerException e) {
 			}
@@ -129,7 +121,7 @@ public class BookingClient extends Thread{
 			out.flush();
 		}
 		catch(IOException ioException){
-			//ioException.printStackTrace();
+			ioException.printStackTrace();
 		}
 	}
  	
