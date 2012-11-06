@@ -99,6 +99,16 @@ public class Database {
     	disconnect();
     }
     
+    //TODO Create an update method
+    public synchronized void updateBooking(FlightBooking flightBooking){
+    	
+    	FlightBooking foundFlightBooking = findFlightBooking(flightBooking.getTransactionTime(), flightBooking.getEmail());
+    	
+    	if(foundFlightBooking.getTransactionTime() != 0){
+    		
+    	}
+    }
+    
     public synchronized ArrayList<FlightBooking> findBookingByEmail(String email){
     	try {
     		connect();connect();
@@ -208,46 +218,44 @@ public class Database {
     }
     
     public FlightBooking findFlightBooking(long transactionEpoch, String email){
+    	FlightBooking booking = new FlightBooking();
     	try {
     		connect();
     		resultSet = statement.executeQuery("SELECT * FROM flightbookings WHERE transaction_epoch = " + transactionEpoch + " AND email = '" + email + "'");
     		
-    		FlightBooking booking = new FlightBooking();
-    		
     		while(resultSet.next()){
-    			FlightBooking flight = new FlightBooking();
-        		flight.setTransactionTime(resultSet.getLong("transaction_epoch"));
-        		flight.setEmail(resultSet.getString("email"));
-        		flight.setFlightToCityAt(resultSet.getString("flight_to_city_at"));
-        		flight.setFlightToCampAt(resultSet.getString("flight_to_camp_at"));
+        		booking.setTransactionTime(resultSet.getLong("transaction_epoch"));
+        		booking.setEmail(resultSet.getString("email"));
+        		booking.setFlightToCityAt(resultSet.getString("flight_to_city_at"));
+        		booking.setFlightToCampAt(resultSet.getString("flight_to_camp_at"));
         		
         		if(resultSet.getInt("from_city") == 1){
-        			flight.setFromCity(true);
+        			booking.setFromCity(true);
         		}
         		else{
-        			flight.setFromCity(false);
+        			booking.setFromCity(false);
         		}
         		
         		if(resultSet.getInt("from_camp") == 1){
-        			flight.setFromCamp(true);
+        			booking.setFromCamp(true);
         		}
         		else{
-        			flight.setFromCamp(false);
+        			booking.setFromCamp(false);
         		}
         		
-        		flight.setPrice(resultSet.getDouble("price"));
+        		booking.setPrice(resultSet.getDouble("price"));
         		
         		if(resultSet.getString("state").equals(FlightBooking.STATE.REQUESTED.toString())){
-        			flight.setState(FlightBooking.STATE.REQUESTED);
+        			booking.setState(FlightBooking.STATE.REQUESTED);
         		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
-        			flight.setState(FlightBooking.STATE.CONFIRMED);
+        			booking.setState(FlightBooking.STATE.CONFIRMED);
         		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
-        			flight.setState(FlightBooking.STATE.CANCEL);
+        			booking.setState(FlightBooking.STATE.CANCEL);
         		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCELED.toString())){
-        			flight.setState(FlightBooking.STATE.CANCELED);
+        			booking.setState(FlightBooking.STATE.CANCELED);
         		}
     		}
     		disconnect();
@@ -257,7 +265,7 @@ public class Database {
         e.printStackTrace();
         }
     	disconnect();
-    	return null;
+    	return booking;
     }
     
     public boolean isFlightBooking(long transactionEpoch, String email){
@@ -421,5 +429,5 @@ public class Database {
         }
     	disconnect();
     	return null;
-    }  
+    }
 }
