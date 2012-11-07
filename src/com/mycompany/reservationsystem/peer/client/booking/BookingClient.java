@@ -23,8 +23,6 @@ public class BookingClient extends Thread{
 		if(peersByState.size() != 0){
 			for(Peer peer : peersByState){
 				new BookingClientWorker(peer.getPeerIpAddress()).start();
-				//setIPAddress(peer.getPeerIpAddress());
-				//findBookings();
 			}
 		}
 	}
