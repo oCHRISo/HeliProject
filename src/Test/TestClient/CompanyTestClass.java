@@ -4,14 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.mycompany.reservationsystem.peer.deamon.PeerStateDeamon;
+import com.mycompany.reservationsystem.peer.daemon.PeerStateDaemon;
 import com.mycompany.reservationsystem.peer.server.PeerServer;
 import com.mycompany.reservationsystem.peer.server.booking.BookingServer;
 
 public class CompanyTestClass {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		PeerStateDeamon peerDeamon = new PeerStateDeamon();
+		PeerStateDaemon peerDeamon = new PeerStateDaemon();
 		PeerServer peerServer = new PeerServer();
 		BookingServer bookingServer = new BookingServer();
 		

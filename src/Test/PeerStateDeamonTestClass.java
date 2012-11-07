@@ -1,11 +1,11 @@
 package Test;
 
-import com.mycompany.reservationsystem.peer.deamon.PeerStateDeamon;
+import com.mycompany.reservationsystem.peer.daemon.PeerStateDaemon;
 
 public class PeerStateDeamonTestClass {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		PeerStateDeamon peerDeamon = new PeerStateDeamon();
+		PeerStateDaemon peerDeamon = new PeerStateDaemon();
 		peerDeamon.start();
 		
 		try {

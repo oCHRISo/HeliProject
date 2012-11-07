@@ -1,12 +1,12 @@
 package Test.TestClient;
 
-import com.mycompany.reservationsystem.peer.deamon.PeerStateDeamon;
+import com.mycompany.reservationsystem.peer.daemon.PeerStateDaemon;
 import com.mycompany.reservationsystem.peer.server.PeerServer;
 import com.mycompany.reservationsystem.peer.server.booking.BookingServer;
 
 public class PeerTestClass {
 	public static void main(String args[]){
-		PeerStateDeamon peerDeamon = new PeerStateDeamon();
+		PeerStateDaemon peerDeamon = new PeerStateDaemon();
 		PeerServer peerServer = new PeerServer();
 		BookingServer bookingServer = new BookingServer();
 		

@@ -1,6 +1,6 @@
 package com.mycompany.reservationsystem.peer.bootstrap;
 
-import com.mycompany.reservationsystem.peer.deamon.PeerStateDeamon;
+import com.mycompany.reservationsystem.peer.daemon.PeerStateDaemon;
 import com.mycompany.reservationsystem.peer.server.PeerServer;
 import com.mycompany.reservationsystem.peer.server.booking.BookingServer;
 import com.mycompany.reservationsystem.peer.ui.CustomerUserInterface;
@@ -8,7 +8,7 @@ import com.mycompany.reservationsystem.peer.ui.CustomerUserInterface;
 public class CustomerBoot {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		PeerStateDeamon peerDeamon = new PeerStateDeamon();
+		PeerStateDaemon peerDeamon = new PeerStateDaemon();
 		PeerServer peerServer = new PeerServer();
 		BookingServer bookingServer = new BookingServer();
 		
