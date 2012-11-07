@@ -99,16 +99,6 @@ public class Database {
     	disconnect();
     }
     
-    //TODO Create an update method
-    public synchronized void updateBooking(FlightBooking flightBooking){
-    	
-    	FlightBooking foundFlightBooking = findFlightBooking(flightBooking.getTransactionTime(), flightBooking.getEmail());
-    	
-    	if(foundFlightBooking.getTransactionTime() != 0){
-    		
-    	}
-    }
-    
     public synchronized ArrayList<FlightBooking> findBookingByEmail(String email){
     	try {
     		connect();
@@ -162,6 +152,62 @@ public class Database {
     	disconnect();
     	return null;
     }
+    
+    public synchronized ArrayList<FlightBooking> findBooking(long startOfPeriod, long endOfPeriod){
+    	ArrayList<FlightBooking> flightBookingsTimePeriod = new ArrayList<FlightBooking>();
+    	try {
+    		connect();
+    		resultSet = statement.executeQuery("SELECT * FROM flightbookings " +
+    				"WHERE transaction_epoch >= " + startOfPeriod + " AND transaction_epoch <= " + endOfPeriod + " " +
+    				"ORDER BY transaction_epoch");
+    		
+    		while(resultSet.next()){
+    			FlightBooking flight = new FlightBooking();
+        		flight.setTransactionTime(resultSet.getLong("transaction_epoch"));
+        		flight.setEmail(resultSet.getString("email"));
+        		flight.setFlightToCityAt(resultSet.getString("flight_to_city_at"));
+        		flight.setFlightToCampAt(resultSet.getString("flight_to_camp_at"));
+        		
+        		if(resultSet.getInt("from_city") == 1){
+        			flight.setFromCity(true);
+        		}
+        		else{
+        			flight.setFromCity(false);
+        		}
+        		
+        		if(resultSet.getInt("from_camp") == 1){
+        			flight.setFromCamp(true);
+        		}
+        		else{
+        			flight.setFromCamp(false);
+        		}
+        		
+        		flight.setPrice(resultSet.getDouble("price"));
+        		
+        		if(resultSet.getString("state").equals(FlightBooking.STATE.REQUESTED.toString())){
+        			flight.setState(FlightBooking.STATE.REQUESTED);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
+        			flight.setState(FlightBooking.STATE.CONFIRMED);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
+        			flight.setState(FlightBooking.STATE.CANCEL);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCELED.toString())){
+        			flight.setState(FlightBooking.STATE.CANCELED);
+        		}
+        		flightBookingsTimePeriod.add(flight);
+    		}
+    		disconnect();
+    		return flightBookingsTimePeriod;
+    	}
+    	catch (Exception e) {  
+        e.printStackTrace();
+        }
+    	disconnect();
+    	return flightBookingsTimePeriod;
+    }
+    
     
     public synchronized ArrayList<FlightBooking> findBooking(String email, FlightBooking.STATE state){
     	ArrayList<FlightBooking> flightSearch = new ArrayList<FlightBooking>();
