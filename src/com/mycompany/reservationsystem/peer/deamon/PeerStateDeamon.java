@@ -8,6 +8,7 @@ import com.mycompany.reservationsystem.peer.client.PeerClient;
 import com.mycompany.reservationsystem.peer.client.booking.BookingClient;
 import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.Peer;
+import com.mycompany.reservationsystem.peer.data.PropertieFile;
 
 /*
  * Thread to maintain peer states
@@ -49,9 +50,8 @@ public class PeerStateDeamon extends Thread{
 			new PeerClient().start();
 			new BookingClient().start();
 			
-			//Make thread sleep every 30 seconds
 			try {
-				sleep(1000*60);
+				sleep(1000 * PropertieFile.getInstance().getPeerStateDeamonTime());
 			} 
 			catch (InterruptedException e) {
 				
