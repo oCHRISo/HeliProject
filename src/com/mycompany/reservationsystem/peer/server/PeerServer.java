@@ -38,7 +38,6 @@ public class PeerServer extends Thread {
 				Peer newPeer = new Peer(ipAddress,Peer.STATE.INACTIVE, new Date().getTime());
 				Database.getInstance().addPeer(newPeer);
 				
-				System.out.println("Peer address that connected " + ipAddress);
 				//Spawn new thread for client
 				new PeerServerWorker(connection).start();
 			} 

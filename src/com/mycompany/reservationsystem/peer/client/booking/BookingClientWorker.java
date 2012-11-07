@@ -41,8 +41,6 @@ public class BookingClientWorker extends Thread{
 					 * Message with no booking shows that server has given all bookings, 
 					 * server will return TRANSACTION_RESPONSE: (21 chars)
 					 */
-					System.out.println("Got message " + message);
-					
 					if(message.length() != 21){ //Got a booking
 						String dataPartOfMessage = message.substring(message.indexOf(":")+1, message.length());
 						

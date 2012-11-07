@@ -30,13 +30,9 @@ public class PeerStateDeamon extends Thread{
 		while(true){
 			Database peerTable = Database.getInstance();
 			ArrayList<Peer> peersByState = peerTable.findPeersByState(Peer.STATE.INACTIVE);
-			System.out.println("Deamon");
 			for(Peer peer : peersByState){
-				try 
-				{
-					System.out.println("IP " + peer.getPeerIpAddress() + peer.getEpochTime());
+				try {
 					if(InetAddress.getByName(peer.getPeerIpAddress().trim()).isReachable(timeout)){
-						System.out.println("Found " + peer.getPeerIpAddress().trim());
 						peer.setState(Peer.STATE.ACTIVE);
 						peer.setEpochTime(new Date().getTime());
 						peerTable.updatePeer(peer);

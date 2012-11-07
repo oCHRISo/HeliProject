@@ -39,7 +39,6 @@ public class BookingServerWorker extends Thread{
 	}
 	
 	public void run(){
-		System.out.println("Booking server running");
 		Database bookingTable = Database.getInstance();
 		bookingList = bookingTable.getAllBookings();
 		
@@ -85,10 +84,9 @@ public class BookingServerWorker extends Thread{
 	private void sendMessage(CommunicationMessages communicationMessage){
 		if(communicationMessage.toString().equals(CommunicationMessages.TRANSACTION_RESPONSE.toString())){
 			String message = "";
-			System.out.println(bookingList.get(nextBookingIndex).getEmail());
-			
 			int isFromCity = 0;
 			int isFromCamp = 0;
+			
 			if(bookingList.get(nextBookingIndex).isFromCity()){
 				isFromCity = 1;
 			}
