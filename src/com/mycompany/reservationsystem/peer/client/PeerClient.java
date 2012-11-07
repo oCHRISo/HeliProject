@@ -23,10 +23,6 @@ public class PeerClient extends Thread{
 		
 		if(peersByState.size() != 0){
 			for(Peer peer : peersByState){
-				//set IP address
-				//setIPAddress(peer.getPeerIpAddress());
-				//find other peer from a peer
-				//findPeers();
 				new PeerClientWorker(peer.getPeerIpAddress()).start();
 			}
 		}
