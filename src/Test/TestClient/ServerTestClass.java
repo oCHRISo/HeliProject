@@ -1,22 +1,20 @@
 package Test.TestClient;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.mycompany.reservationsystem.peer.deamon.PeerStateDeamon;
 import com.mycompany.reservationsystem.peer.server.PeerServer;
 import com.mycompany.reservationsystem.peer.server.booking.BookingServer;
 
 public class ServerTestClass {
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		PeerStateDeamon peerDeamon = new PeerStateDeamon();
 		PeerServer peerServer = new PeerServer();
 		BookingServer bookingServer = new BookingServer();
         
-		ExecutorService pool = Executors.newFixedThreadPool(3);
-		pool.execute(peerDeamon);
-		pool.execute(peerServer);
-		pool.execute(bookingServer);
+		peerDeamon.setDaemon(true);
+		peerDeamon.start();
+		peerServer.start();
+		bookingServer.start();
 		
 		try {
 			System.out.println("Hello");
@@ -29,6 +27,8 @@ public class ServerTestClass {
 		
 		peerServer.close();
 		bookingServer.close();
-		pool.shutdown();
+		peerDeamon.stop();
+		peerServer.stop();
+		bookingServer.stop();
 	}
 }
