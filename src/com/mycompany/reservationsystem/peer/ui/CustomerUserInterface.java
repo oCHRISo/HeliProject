@@ -144,12 +144,16 @@ public class CustomerUserInterface{
 		String email = readLine();
 		
 		ArrayList<FlightBooking> bookingsByEmail = Database.getInstance().findBookingByEmail(email);
-		
-		System.out.println("Flight to camp at\tFlight to city at\tFrom Camp\tFrom City\tPrice\tState");
-		for(FlightBooking flightBooking : bookingsByEmail){
-			System.out.println(flightBooking.getFlightToCampAt() + "\t\t\t" + flightBooking.getFlightToCityAt() + "\t\t" +
-					flightBooking.isFromCamp() + "\t\t" + flightBooking.isFromCity() + "\t\t" + flightBooking.getPrice() +
-					"\t" + flightBooking.getState().toString());
+		if(bookingsByEmail.size() != 0){
+			System.out.println("Flight to camp at\tFlight to city at\tFrom Camp\tFrom City\tPrice\tState");
+			for(FlightBooking flightBooking : bookingsByEmail){
+				System.out.println(flightBooking.getFlightToCampAt() + "\t\t\t" + flightBooking.getFlightToCityAt() + "\t\t" +
+						flightBooking.isFromCamp() + "\t\t" + flightBooking.isFromCity() + "\t\t" + flightBooking.getPrice() +
+						"\t" + flightBooking.getState().toString());
+			}
+		}
+		else{
+			System.out.println("No Bookings!");
 		}
 	}
 }
