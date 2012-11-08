@@ -9,7 +9,6 @@ public class PeerTestClass {
 		PeerStateDaemon peerDeamon = new PeerStateDaemon();
 		PeerServer peerServer = new PeerServer();
 		BookingServer bookingServer = new BookingServer();
-		
 		peerDeamon.setDaemon(true);
 		peerDeamon.start();
 		peerServer.start();
