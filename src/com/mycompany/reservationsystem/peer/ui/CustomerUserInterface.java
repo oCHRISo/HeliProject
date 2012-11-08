@@ -106,7 +106,6 @@ public class CustomerUserInterface{
 		System.out.println("Please enter in your email address:");
 		String email = readLine();
 		
-		//TODO Show all confirmed bookings for the email address
 		ArrayList<FlightBooking> confirmedList = Database.getInstance().findBooking(email, FlightBooking.STATE.CONFIRMED);
 		
 		if(confirmedList.size() == 0){
@@ -122,7 +121,6 @@ public class CustomerUserInterface{
 			System.out.println("Please select one of the confirmed bookings that you wish to cancel:");
 			int calcelOption = Integer.parseInt(readLine());
 			
-			//TODO Add transaction to cancel the booking
 			FlightBooking cancelFlight = new FlightBooking();
 			cancelFlight.setTransactionTime(new Date().getTime());
 			cancelFlight.setEmail(confirmedList.get(calcelOption).getEmail());

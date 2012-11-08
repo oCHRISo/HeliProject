@@ -20,16 +20,16 @@ public class TransactionDaemon extends Thread {
 				e.printStackTrace();
 			}
 			
-			System.out.println("Running Transaction Daemon");
-			long currentEpoch = 1352335297129L;//new Date().getTime(); //1352335297129L;
-			long period = 7200L;//PropertyFile.getInstance().getTransactionTimePeriod() * EPOCH_MINUTE; //7200L;
-			long startOfPeriod = 1352335282729L;//currentEpoch - (period*2); //1352335282729L;
-			long endOfPeriod = 1352335289929L;//currentEpoch - period; //1352335289929L;
+			//System.out.println("Running Transaction Daemon");
+			long currentEpoch = new Date().getTime(); //1352335297129L;
+			long period = PropertyFile.getInstance().getTransactionTimePeriod() * EPOCH_MINUTE; //7200L;
+			long startOfPeriod = currentEpoch - (period*2); //1352335282729L;
+			long endOfPeriod = currentEpoch - period; //1352335289929L;
 			
-			System.out.println("startOfPeriod " + startOfPeriod);
-			System.out.println("endOfPeriod " + endOfPeriod);
-			System.out.println("period " + period);
-			System.out.println("currentEpoch " + currentEpoch);
+			//System.out.println("startOfPeriod " + startOfPeriod);
+			//System.out.println("endOfPeriod " + endOfPeriod);
+			//System.out.println("period " + period);
+			//System.out.println("currentEpoch " + currentEpoch);
 			
 			ArrayList<FlightBooking> timePeriodBookings = Database.getInstance().findBooking(startOfPeriod, endOfPeriod);
 			
@@ -99,8 +99,6 @@ public class TransactionDaemon extends Thread {
 			int numOfConfirmed = 0;
 			int numOfCanceled = 0;
 			for(FlightBooking transaction : allTransactionsForDateTime){
-				System.out.println("1" + transaction.getState().toString());
-				System.out.println("2" + FlightBooking.STATE.CONFIRMED.toString());
 				if(transaction.getState().toString().equals(FlightBooking.STATE.CONFIRMED.toString())){
 					numOfConfirmed++;
 				}
@@ -116,24 +114,16 @@ public class TransactionDaemon extends Thread {
 			
 			//Can confirm the transaction
 			if(seatsUsed < flightTime.getNumOfSeats()){
-				System.out.println("CONFIRMED");
 				flightBooking.setTransactionTime(new Date().getTime());
 				flightBooking.setState(FlightBooking.STATE.CONFIRMED);
 			}
 			//Have to reject the transaction
 			else{
-				System.out.println("REJECTED");
 				flightBooking.setTransactionTime(new Date().getTime());
 				flightBooking.setState(FlightBooking.STATE.REJECTED);
 			}
 			
-			//Check to see if transaction is already done
-			System.out.println("C N = " + Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
-					flightBooking.getFlightToCampAt(), FlightBooking.STATE.CONFIRMED).size());
-			
-			System.out.println("R N = " + Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
-					flightBooking.getFlightToCampAt(), FlightBooking.STATE.REJECTED).size());
-			
+			//Check to see if transaction is already done		
 			if(Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
 					flightBooking.getFlightToCampAt(), FlightBooking.STATE.CONFIRMED).size() == 0 && Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
 							flightBooking.getFlightToCampAt(), FlightBooking.STATE.REJECTED).size() == 0){

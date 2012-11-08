@@ -65,11 +65,11 @@ public class BookingClientWorker extends Thread{
 			}
  		}
 		catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		catch(IOException ioException){
-			ioException.printStackTrace();
+			//ioException.printStackTrace();
 			Peer peer = new Peer();
 			peer = Database.getInstance().findPeerByIpAddress(ipAddress);
 			peer.setState(Peer.STATE.INACTIVE);
@@ -85,7 +85,7 @@ public class BookingClientWorker extends Thread{
 				requestSocket.close();
 			}
 			catch(IOException ioException){
-				ioException.printStackTrace();
+				//ioException.printStackTrace();
 			}
 			catch (NullPointerException e) {
 			}
@@ -103,7 +103,7 @@ public class BookingClientWorker extends Thread{
 			out.flush();
 		}
 		catch(IOException ioException){
-			ioException.printStackTrace();
+			//ioException.printStackTrace();
 		}
 	}
  	
@@ -126,8 +126,6 @@ public class BookingClientWorker extends Thread{
  		String price = dataPartOfMessage.substring(0,dataPartOfMessage.indexOf(","));
  		dataPartOfMessage = dataPartOfMessage.substring(dataPartOfMessage.indexOf(",")+1, dataPartOfMessage.length());
  		String state = dataPartOfMessage.substring(0,dataPartOfMessage.indexOf(","));
- 		
- 		System.out.println(transactionEpoch + " " + email);
  		
  		booking.setTransactionTime(Long.parseLong(transactionEpoch));
  		booking.setEmail(email);
@@ -155,11 +153,17 @@ public class BookingClientWorker extends Thread{
  		else if(state.equals(FlightBooking.STATE.CONFIRMED.toString())){
  			booking.setState(FlightBooking.STATE.CONFIRMED);
  		}
+ 		else if(state.equals(FlightBooking.STATE.REJECTED.toString())){
+ 			booking.setState(FlightBooking.STATE.REJECTED);
+ 		}
  		else if(state.equals(FlightBooking.STATE.CANCEL.toString())){
  			booking.setState(FlightBooking.STATE.CANCEL);
  		}
  		else if(state.equals(FlightBooking.STATE.CANCELED.toString())){
  			booking.setState(FlightBooking.STATE.CANCELED);
+ 		}
+ 		else if(state.equals(FlightBooking.STATE.CANCEL_REJECTED.toString())){
+ 			booking.setState(FlightBooking.STATE.CANCEL_REJECTED);
  		}
  		return booking;
  	}

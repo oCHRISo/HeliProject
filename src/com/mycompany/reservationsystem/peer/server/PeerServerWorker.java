@@ -84,10 +84,8 @@ public class PeerServerWorker extends Thread{
 	private void sendMessage(CommunicationMessages communicationMessage){
 		if(communicationMessage.toString().equals(CommunicationMessages.IP_RESPONSE.toString())){
 			String message = "";
-			System.out.println(peerList.get(nextIPIndex).getPeerIpAddress());
 			message += CommunicationMessages.IP_RESPONSE.toString() + ":" + peerList.get(nextIPIndex).getPeerIpAddress();
 			nextIPIndex++;
-			System.out.println(message);
 			try{
 				out.writeObject(message);
 				out.flush();

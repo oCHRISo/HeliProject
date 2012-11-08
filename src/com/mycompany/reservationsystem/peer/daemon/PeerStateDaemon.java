@@ -40,10 +40,10 @@ public class PeerStateDaemon extends Thread{
 					}
 				} 
 				catch(NullPointerException e){
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
 			

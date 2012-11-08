@@ -62,10 +62,10 @@ public class BookingServerWorker extends Thread{
 			}
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		finally{
 			//Closing connection
@@ -75,7 +75,7 @@ public class BookingServerWorker extends Thread{
 				connection.close();
 			}
 			catch(IOException ioException){
-				ioException.printStackTrace();
+				//ioException.printStackTrace();
 			}
 		}
 	}
@@ -107,7 +107,6 @@ public class BookingServerWorker extends Thread{
 			
 			message += CommunicationMessages.TRANSACTION_RESPONSE.toString() + ":" + data;
 			nextBookingIndex++;
-			System.out.println(message);
 			
 			try{
 				out.writeObject(message);
