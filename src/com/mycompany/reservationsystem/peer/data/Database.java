@@ -318,6 +318,68 @@ public class Database {
     	return flightSearch;
     }
     
+    public synchronized ArrayList<FlightBooking> findBooking(String flightDateTime, boolean toCity){
+    	ArrayList<FlightBooking> flightDateTimeTransaction = new ArrayList<FlightBooking>();
+    	try {
+    		connect();
+    		String query = "";
+    		
+    		if(toCity){
+    			query = "SELECT * FROM flightbookings WHERE flight_to_city_at = '" + flightDateTime + "'";
+    		}
+    		else{
+    			query = "SELECT * FROM flightbookings WHERE flight_to_camp_at = '" + flightDateTime + "'";
+    		}
+    		
+    		resultSet = statement.executeQuery(query);
+    		
+    		while(resultSet.next()){
+    			FlightBooking flight = new FlightBooking();
+        		flight.setTransactionTime(resultSet.getLong("transaction_epoch"));
+        		flight.setEmail(resultSet.getString("email"));
+        		flight.setFlightToCityAt(resultSet.getString("flight_to_city_at"));
+        		flight.setFlightToCampAt(resultSet.getString("flight_to_camp_at"));
+        		
+        		if(resultSet.getInt("from_city") == 1){
+        			flight.setFromCity(true);
+        		}
+        		else{
+        			flight.setFromCity(false);
+        		}
+        		
+        		if(resultSet.getInt("from_camp") == 1){
+        			flight.setFromCamp(true);
+        		}
+        		else{
+        			flight.setFromCamp(false);
+        		}
+        		
+        		flight.setPrice(resultSet.getDouble("price"));
+        		
+        		if(resultSet.getString("state").equals(FlightBooking.STATE.REQUESTED.toString())){
+        			flight.setState(FlightBooking.STATE.REQUESTED);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
+        			flight.setState(FlightBooking.STATE.CONFIRMED);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
+        			flight.setState(FlightBooking.STATE.CANCEL);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCELED.toString())){
+        			flight.setState(FlightBooking.STATE.CANCELED);
+        		}
+        		flightDateTimeTransaction.add(flight);
+    		}
+    		disconnect();
+    		return flightDateTimeTransaction;
+    	}
+    	catch (Exception e) {  
+        e.printStackTrace();
+        }
+    	disconnect();
+    	return flightDateTimeTransaction;
+    }
+    
     public synchronized ArrayList<FlightBooking> getAllBookings(){
     	try {    	
     		connect();
@@ -567,14 +629,17 @@ public class Database {
 		disconnect();
 	}
     
-    public synchronized ArrayList<Integer> getTimes(){
+    public synchronized ArrayList<FlightTime> getTimes(){
+    	ArrayList<FlightTime> times = new ArrayList<FlightTime>();
     	try {
     		connect();
     		resultSet = statement.executeQuery("SELECT * FROM timetable");
-    		ArrayList<Integer> times = new ArrayList<Integer>();
     		
     		while(resultSet.next()){
-    			times.add(Integer.valueOf(resultSet.getInt("flight_time")));
+    			FlightTime flightTime = new FlightTime();
+    			flightTime.setFlightTime(resultSet.getString("flight_time"));
+    			flightTime.setNumOfSeats(Integer.valueOf(resultSet.getString("number_seats")));
+    			times.add(flightTime);
     		}
     		disconnect();
     		return times;
@@ -583,6 +648,26 @@ public class Database {
         e.printStackTrace();
         }
     	disconnect();
-    	return null;
+    	return times;
+    }
+    
+    public synchronized FlightTime getNumberSeats(String time){
+    	FlightTime flightTime = new FlightTime();
+    	try {
+    		connect();
+    		resultSet = statement.executeQuery("SELECT * FROM timetable WHERE flight_time = '" + time + "'");
+    		
+    		while(resultSet.next()){
+    			flightTime.setFlightTime(resultSet.getString("flight_time"));
+    			flightTime.setNumOfSeats(Integer.valueOf(resultSet.getString("number_seats")));
+    		}
+    		disconnect();
+    		return flightTime;
+    	}
+    	catch (Exception e) {  
+        e.printStackTrace();
+        }
+    	disconnect();
+    	return flightTime;
     }
 }
