@@ -135,6 +135,9 @@ public class Database {
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
         			flight.setState(FlightBooking.STATE.CONFIRMED);
         		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.REJECTED.toString())){
+        			flight.setState(FlightBooking.STATE.REJECTED);
+        		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
         			flight.setState(FlightBooking.STATE.CANCEL);
         		}
@@ -189,6 +192,9 @@ public class Database {
         		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
         			flight.setState(FlightBooking.STATE.CONFIRMED);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.REJECTED.toString())){
+        			flight.setState(FlightBooking.STATE.REJECTED);
         		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
         			flight.setState(FlightBooking.STATE.CANCEL);
@@ -245,6 +251,9 @@ public class Database {
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
         			flight.setState(FlightBooking.STATE.CONFIRMED);
         		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.REJECTED.toString())){
+        			flight.setState(FlightBooking.STATE.REJECTED);
+        		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
         			flight.setState(FlightBooking.STATE.CANCEL);
         		}
@@ -299,6 +308,9 @@ public class Database {
         		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
         			flight.setState(FlightBooking.STATE.CONFIRMED);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.REJECTED.toString())){
+        			flight.setState(FlightBooking.STATE.REJECTED);
         		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
         			flight.setState(FlightBooking.STATE.CANCEL);
@@ -362,11 +374,17 @@ public class Database {
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CONFIRMED.toString())){
         			flight.setState(FlightBooking.STATE.CONFIRMED);
         		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.REJECTED.toString())){
+        			flight.setState(FlightBooking.STATE.REJECTED);
+        		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL.toString())){
         			flight.setState(FlightBooking.STATE.CANCEL);
         		}
         		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCELED.toString())){
         			flight.setState(FlightBooking.STATE.CANCELED);
+        		}
+        		else if(resultSet.getString("state").equals(FlightBooking.STATE.CANCEL_REJECTED.toString())){
+        			flight.setState(FlightBooking.STATE.CANCEL_REJECTED);
         		}
         		flightDateTimeTransaction.add(flight);
     		}
