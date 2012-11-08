@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
+import com.mycompany.reservationsystem.peer.data.FlightTime;
 import com.mycompany.reservationsystem.peer.data.PropertyFile;
 
 public class TransactionDaemon extends Thread {
@@ -33,12 +34,11 @@ public class TransactionDaemon extends Thread {
 			ArrayList<FlightBooking> timePeriodBookings = Database.getInstance().findBooking(startOfPeriod, endOfPeriod);
 			
 			ArrayList<FlightBooking> cancelTransactions = getTransactionsByState(timePeriodBookings, FlightBooking.STATE.CANCEL);
-			
 			//Do CANCEL transactions first
 			processCancelTransactions(cancelTransactions);
 			
-			//TODO transactions to commit
-			
+			ArrayList<FlightBooking> requestedTransactions = getTransactionsByState(timePeriodBookings, FlightBooking.STATE.REQUESTED);
+			processRequestedTransactions(requestedTransactions);		
 		}
 	}
 	
@@ -69,9 +69,65 @@ public class TransactionDaemon extends Thread {
 			//Else there is a confirmed booking, cancel the confirmed transaction
 			else{ 
 				flightBooking.setTransactionTime(new Date().getTime());
-				flightBooking.setState(FlightBooking.STATE.CANCELED);
-			} 
-			Database.getInstance().addBooking(flightBooking);
+				flightBooking.setState(FlightBooking.STATE.CANCELED);	
+			}
+			
+			//Check to see if transaction is already done
+			if(Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
+					flightBooking.getFlightToCampAt(), flightBooking.getState()).size() == 0){
+				Database.getInstance().addBooking(flightBooking);
+			}
+		}
+	}
+	
+	private void processRequestedTransactions(ArrayList<FlightBooking> requestedTransactions){
+		for(FlightBooking flightBooking : requestedTransactions){
+			String dateTime = "";
+			boolean toCity = false;
+			
+			if(flightBooking.getFlightToCityAt().equals("NA")){
+				dateTime = flightBooking.getFlightToCampAt();
+				toCity = false;
+			}
+			else{
+				dateTime = flightBooking.getFlightToCityAt();
+				toCity = true;
+			}
+			
+			ArrayList<FlightBooking> allTransactionsForDateTime = Database.getInstance().findBooking(dateTime, toCity);
+			
+			int numOfConfirmed = 0;
+			int numOfCanceled = 0;
+			for(FlightBooking transaction : allTransactionsForDateTime){
+				if(transaction.getState().toString().equals(FlightBooking.STATE.CONFIRMED.toString())){
+					numOfConfirmed++;
+				}
+				if(transaction.getState().toString().equals(FlightBooking.STATE.CANCELED.toString())){
+					numOfCanceled++;
+				}
+			}
+			
+			int seatsUsed = numOfConfirmed - numOfCanceled;
+			String time = dateTime.substring(dateTime.indexOf("@")+1);
+			
+			FlightTime flightTime = Database.getInstance().getNumberSeats(time);
+			
+			//Can confirm the transaction
+			if(seatsUsed < flightTime.getNumOfSeats()){
+				flightBooking.setTransactionTime(new Date().getTime());
+				flightBooking.setState(FlightBooking.STATE.CONFIRMED);
+			}
+			//Have to reject the transaction
+			else{
+				flightBooking.setTransactionTime(new Date().getTime());
+				flightBooking.setState(FlightBooking.STATE.REJECTED);
+			}
+			
+			//Check to see if transaction is already done
+			if(Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
+					flightBooking.getFlightToCampAt(), flightBooking.getState()).size() == 0){
+				Database.getInstance().addBooking(flightBooking);
+			}
 		}
 	}
 }
