@@ -19,10 +19,16 @@ public class TransactionDaemon extends Thread {
 				e.printStackTrace();
 			}
 			
-			long currentEpoch = new Date().getTime();
-			long period = PropertyFile.getInstance().getTransactionTimePeriod() * EPOCH_MINUTE;
-			long startOfPeriod = currentEpoch - (period*2);
-			long endOfPeriod = currentEpoch - period;
+			System.out.println("Running Transaction Daemon");
+			long currentEpoch = 1352335297129L;//new Date().getTime();
+			long period = 7200L;//PropertyFile.getInstance().getTransactionTimePeriod() * EPOCH_MINUTE;
+			long startOfPeriod = 1352335282729L;//currentEpoch - (period*2);
+			long endOfPeriod = 1352335289929L;//currentEpoch - period;
+			
+			System.out.println("startOfPeriod " + startOfPeriod);
+			System.out.println("endOfPeriod " + endOfPeriod);
+			System.out.println("period " + period);
+			System.out.println("currentEpoch " + currentEpoch);
 			
 			ArrayList<FlightBooking> timePeriodBookings = Database.getInstance().findBooking(startOfPeriod, endOfPeriod);
 			
@@ -32,7 +38,6 @@ public class TransactionDaemon extends Thread {
 			processCancelTransactions(cancelTransactions);
 			
 			//TODO transactions to commit
-			
 			
 		}
 	}
@@ -54,7 +59,7 @@ public class TransactionDaemon extends Thread {
 		for(FlightBooking flightBooking : cancelTransactions){
 			//Check to see if there is a confirmed transaction
 			ArrayList<FlightBooking> confirmedBooking = Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
-					flightBooking.getFlightToCampAt(), flightBooking.getState());
+					flightBooking.getFlightToCampAt(), FlightBooking.STATE.CONFIRMED);
 			
 			//If there are no confirmed transaction, then cannot cancel a transaction that has not been confirmed
 			if(confirmedBooking.size() == 0){ 
