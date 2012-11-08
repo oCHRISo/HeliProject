@@ -7,7 +7,7 @@ import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
 import com.mycompany.reservationsystem.peer.data.PropertyFile;
 
-public class TranactionDaemon extends Thread {
+public class TransactionDaemon extends Thread {
 	private final int EPOCH_MINUTE = 60;
 	
 	public void run(){
