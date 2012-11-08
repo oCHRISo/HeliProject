@@ -20,10 +20,10 @@ public class TransactionDaemon extends Thread {
 			}
 			
 			System.out.println("Running Transaction Daemon");
-			long currentEpoch = 1352335297129L;//new Date().getTime();
-			long period = 7200L;//PropertyFile.getInstance().getTransactionTimePeriod() * EPOCH_MINUTE;
-			long startOfPeriod = 1352335282729L;//currentEpoch - (period*2);
-			long endOfPeriod = 1352335289929L;//currentEpoch - period;
+			long currentEpoch = new Date().getTime(); //1352335297129L;
+			long period = PropertyFile.getInstance().getTransactionTimePeriod() * EPOCH_MINUTE; //7200L;
+			long startOfPeriod = currentEpoch - (period*2); //1352335282729L;
+			long endOfPeriod = currentEpoch - period; //1352335289929L;
 			
 			System.out.println("startOfPeriod " + startOfPeriod);
 			System.out.println("endOfPeriod " + endOfPeriod);
