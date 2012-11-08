@@ -5,7 +5,6 @@ import java.util.Date;
 
 import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
-import com.mycompany.reservationsystem.peer.data.FlightBooking.STATE;
 import com.mycompany.reservationsystem.peer.data.FlightTime;
 import com.mycompany.reservationsystem.peer.data.PropertyFile;
 
