@@ -26,19 +26,18 @@ public class TranactionDaemon extends Thread {
 			
 			ArrayList<FlightBooking> timePeriodBookings = Database.getInstance().findBooking(startOfPeriod, endOfPeriod);
 			
+			ArrayList<FlightBooking> cancelTransactions = getTransactionsByState(timePeriodBookings, FlightBooking.STATE.CANCEL);
 			
-			ArrayList<FlightBooking> cancelTransactions = findBookingsByState(timePeriodBookings, FlightBooking.STATE.CANCEL);
+			//Do CANCEL transactions first
 			processCancelTransactions(cancelTransactions);
-			
-			
 			
 			//TODO transactions to commit
 			
-			//Do CANCEL transactions first
+			
 		}
 	}
 	
-	private ArrayList<FlightBooking> findBookingsByState(ArrayList<FlightBooking> timePeriodBookings, FlightBooking.STATE state){
+	private ArrayList<FlightBooking> getTransactionsByState(ArrayList<FlightBooking> timePeriodBookings, FlightBooking.STATE state){
 		ArrayList<FlightBooking> bookings = new ArrayList<FlightBooking>();
 		
 		for(FlightBooking flightBooking : timePeriodBookings){
@@ -51,8 +50,23 @@ public class TranactionDaemon extends Thread {
 	}
 	
 	private void processCancelTransactions(ArrayList<FlightBooking> cancelTransactions){
-		/*
-		 * 
-		 */
+		//For each cancel transaction
+		for(FlightBooking flightBooking : cancelTransactions){
+			//Check to see if there is a confirmed transaction
+			ArrayList<FlightBooking> confirmedBooking = Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
+					flightBooking.getFlightToCampAt(), flightBooking.getState());
+			
+			//If there are no confirmed transaction, then cannot cancel a transaction that has not been confirmed
+			if(confirmedBooking.size() == 0){ 
+				flightBooking.setTransactionTime(new Date().getTime());
+				flightBooking.setState(FlightBooking.STATE.CANCEL_REJECTED);
+			}
+			//Else there is a confirmed booking, cancel the confirmed transaction
+			else{ 
+				flightBooking.setTransactionTime(new Date().getTime());
+				flightBooking.setState(FlightBooking.STATE.CANCELED);
+			} 
+			Database.getInstance().addBooking(flightBooking);
+		}
 	}
 }
