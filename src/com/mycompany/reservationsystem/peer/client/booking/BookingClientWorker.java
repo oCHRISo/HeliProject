@@ -10,6 +10,7 @@ import com.mycompany.reservationsystem.peer.communication.CommunicationMessages;
 import com.mycompany.reservationsystem.peer.data.Database;
 import com.mycompany.reservationsystem.peer.data.FlightBooking;
 import com.mycompany.reservationsystem.peer.data.Peer;
+import com.mycompany.reservationsystem.peer.data.SystemLogger;
 
 public class BookingClientWorker extends Thread{
 	private static final int PORT_NUMBER = 50001;
@@ -74,6 +75,7 @@ public class BookingClientWorker extends Thread{
 			peer.setState(Peer.STATE.INACTIVE);
 			peer.setEpochTime(new Date().getTime());
 			Database.getInstance().updatePeer(peer);
+			SystemLogger.getInstance().logWarning(ioException.getMessage() + " Could be a firewall problem");
 		}
 		finally{
 			//Closing connection
