@@ -26,7 +26,7 @@ public class BookingServer extends Thread{
 					serverSocket.close();
 				}
 				catch(IOException ioException){
-					ioException.printStackTrace();
+					//ioException.printStackTrace();
 				}
 			}
 		}
@@ -39,10 +39,10 @@ public class BookingServer extends Thread{
 			socket.close();
 		} 
 		catch (UnknownHostException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} 
 		catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 }

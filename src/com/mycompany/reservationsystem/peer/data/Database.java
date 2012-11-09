@@ -220,7 +220,7 @@ public class Database {
     	return flightBookingsTimePeriod;
     }
     
-    public synchronized ArrayList<FlightBooking> findBooking(String email, String flightToCityAt,String flightToCampAt, FlightBooking.STATE state){
+    public synchronized ArrayList<FlightBooking> findBookings(String email, String flightToCityAt,String flightToCampAt, FlightBooking.STATE state){
     	ArrayList<FlightBooking> flightBookingsByFlightDateTimeState = new ArrayList<FlightBooking>();
     	try {
     		connect();
@@ -711,5 +711,30 @@ public class Database {
         }
     	disconnect();
     	return flightTime;
+    }
+    
+    public synchronized void removeDuplicateBookings(){
+    	ArrayList<FlightBooking> allBookings = getAllBookings();
+    	
+    	for(FlightBooking flightBooking : allBookings){
+    		ArrayList<FlightBooking> bookings = findBookings(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
+    				flightBooking.getFlightToCampAt(), flightBooking.getState());
+    		
+    		if(bookings.size() > 1){ //if more then 1 then there is a duplicate
+    			removeBookingByEpoch(bookings.get(0).getTransactionTime());
+    		}
+    	}
+    	
+    }
+    
+    public synchronized void removeBookingByEpoch(long epochTime){
+    	try {
+    		connect();
+    		resultSet = statement.executeQuery("DELETE FROM flightbookings WHERE transaction_epoch = " + epochTime);
+    		disconnect();
+    	}
+    	catch (Exception e) {  
+        e.printStackTrace();
+        }
     }
 }

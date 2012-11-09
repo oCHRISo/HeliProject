@@ -2,7 +2,7 @@ package Test;
 
 import com.mycompany.reservationsystem.peer.daemon.TransactionDaemon;
 
-public class CancelTransactionDaemonTestClass {
+public class TransactionDaemonTestClass {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		TransactionDaemon tD = new TransactionDaemon();

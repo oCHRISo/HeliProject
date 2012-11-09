@@ -40,4 +40,8 @@ public class PropertyFile {
 	public int getTransactionTimePeriod(){
 		return Integer.parseInt(prop.getProperty("TransactionTimePeriod"));
 	}
+	
+	public int getDuplicatesDaemonTime(){
+		return Integer.parseInt(prop.getProperty("DuplicatesDaemonTime"));
+	}
 }

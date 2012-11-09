@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import com.mycompany.reservationsystem.peer.daemon.PeerStateDaemon;
+import com.mycompany.reservationsystem.peer.daemon.RemoveDuplicatesDaemon;
 import com.mycompany.reservationsystem.peer.daemon.TransactionDaemon;
 import com.mycompany.reservationsystem.peer.server.PeerServer;
 import com.mycompany.reservationsystem.peer.server.booking.BookingServer;
@@ -14,13 +15,16 @@ public class CompanyServerBoot {
 	public static void main(String[] args) {
 		PeerStateDaemon peerDeamon = new PeerStateDaemon();
 		TransactionDaemon transaction = new TransactionDaemon();
+		RemoveDuplicatesDaemon removeDuplicatesDaemon = new RemoveDuplicatesDaemon();
 		PeerServer peerServer = new PeerServer();
 		BookingServer bookingServer = new BookingServer();
 		
 		transaction.setDaemon(true);
 		peerDeamon.setDaemon(true);
+		removeDuplicatesDaemon.setDaemon(true);
 		transaction.start();
 		peerDeamon.start();
+		removeDuplicatesDaemon.start();
 		peerServer.start();
 		bookingServer.start();
 		
@@ -43,5 +47,6 @@ public class CompanyServerBoot {
 		bookingServer.stop();
 		peerDeamon.stop();
 		transaction.stop();
+		removeDuplicatesDaemon.stop();
 	}
 }

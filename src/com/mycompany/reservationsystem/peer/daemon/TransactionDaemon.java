@@ -58,7 +58,7 @@ public class TransactionDaemon extends Thread {
 		//For each cancel transaction
 		for(FlightBooking flightBooking : cancelTransactions){
 			//Check to see if there is a confirmed transaction
-			ArrayList<FlightBooking> confirmedBooking = Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
+			ArrayList<FlightBooking> confirmedBooking = Database.getInstance().findBookings(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
 					flightBooking.getFlightToCampAt(), FlightBooking.STATE.CONFIRMED);
 			
 			//If there are no confirmed transaction, then cannot cancel a transaction that has not been confirmed
@@ -73,7 +73,7 @@ public class TransactionDaemon extends Thread {
 			}
 			
 			//Check to see if transaction is already done
-			if(Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
+			if(Database.getInstance().findBookings(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
 					flightBooking.getFlightToCampAt(), flightBooking.getState()).size() == 0){
 				Database.getInstance().addBooking(flightBooking);
 			}
@@ -124,8 +124,8 @@ public class TransactionDaemon extends Thread {
 			}
 			
 			//Check to see if transaction is already done		
-			if(Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
-					flightBooking.getFlightToCampAt(), FlightBooking.STATE.CONFIRMED).size() == 0 && Database.getInstance().findBooking(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
+			if(Database.getInstance().findBookings(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
+					flightBooking.getFlightToCampAt(), FlightBooking.STATE.CONFIRMED).size() == 0 && Database.getInstance().findBookings(flightBooking.getEmail(), flightBooking.getFlightToCityAt(), 
 							flightBooking.getFlightToCampAt(), FlightBooking.STATE.REJECTED).size() == 0){
 				Database.getInstance().addBooking(flightBooking);
 			}
