@@ -1,6 +1,7 @@
 package com.mycompany.reservationsystem.peer.daemon;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.mycompany.reservationsystem.peer.data.Database;
@@ -9,8 +10,6 @@ import com.mycompany.reservationsystem.peer.data.FlightTime;
 import com.mycompany.reservationsystem.peer.data.PropertyFile;
 
 public class TransactionDaemon extends Thread {
-	private final int EPOCH_MINUTE = 60;
-	
 	public void run(){
 		while(true){
 			try {
@@ -21,15 +20,26 @@ public class TransactionDaemon extends Thread {
 			}
 			
 			//System.out.println("Running Transaction Daemon");
-			long currentEpoch = new Date().getTime(); //1352335297129L;
-			long period = PropertyFile.getInstance().getTransactionTimePeriod() * EPOCH_MINUTE; //7200L;
-			long startOfPeriod = currentEpoch - (period*2); //1352335282729L;
-			long endOfPeriod = currentEpoch - period; //1352335289929L;
+			//1352335297129L;
+			Date currentTime = Calendar.getInstance().getTime();
+			Calendar startPeriod = Calendar.getInstance();
+			startPeriod.setTime(currentTime);
+			startPeriod.add(Calendar.MINUTE, -(PropertyFile.getInstance().getTransactionTimePeriod()*2));
+			Calendar endPeriod = Calendar.getInstance();
+			endPeriod.setTime(currentTime);
+			endPeriod.add(Calendar.MINUTE, -PropertyFile.getInstance().getTransactionTimePeriod());
 			
-			//System.out.println("startOfPeriod " + startOfPeriod);
-			//System.out.println("endOfPeriod " + endOfPeriod);
-			//System.out.println("period " + period);
-			//System.out.println("currentEpoch " + currentEpoch);
+			//long period = PropertyFile.getInstance().getTransactionTimePeriod() * EPOCH_MINUTE; //7200L;
+			
+			long startOfPeriod = startPeriod.getTime().getTime(); //1352335282729L;
+			long endOfPeriod = endPeriod.getTime().getTime(); //1352335289929L;
+			
+			//1352441950862
+			
+			System.out.println("startOfPeriod " + startOfPeriod);
+			System.out.println("endOfPeriod " + endOfPeriod);
+			System.out.println("period " + PropertyFile.getInstance().getTransactionTimePeriod());
+			System.out.println("currentEpoch " + currentTime.getTime());
 			
 			ArrayList<FlightBooking> timePeriodBookings = Database.getInstance().findBooking(startOfPeriod, endOfPeriod);
 			
@@ -84,12 +94,11 @@ public class TransactionDaemon extends Thread {
 		for(FlightBooking flightBooking : requestedTransactions){
 			String dateTime = "";
 			boolean toCity = false;
-			
 			if(flightBooking.getFlightToCityAt().equals("NA")){
 				dateTime = flightBooking.getFlightToCampAt();
 				toCity = false;
 			}
-			else{
+			else if(flightBooking.getFlightToCampAt().equals("NA")){
 				dateTime = flightBooking.getFlightToCityAt();
 				toCity = true;
 			}

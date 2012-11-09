@@ -552,7 +552,7 @@ public class Database {
            disconnect();
         } 
     	catch (Exception e) {  
-            e.printStackTrace();  
+            //e.printStackTrace();  
         }
     }
     
