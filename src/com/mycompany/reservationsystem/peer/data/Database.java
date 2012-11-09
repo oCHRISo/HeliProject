@@ -730,7 +730,7 @@ public class Database {
     public synchronized void removeBookingByEpoch(long epochTime){
     	try {
     		connect();
-    		resultSet = statement.executeQuery("DELETE FROM flightbookings WHERE transaction_epoch = " + epochTime);
+    		statement.execute("DELETE FROM flightbookings WHERE transaction_epoch = " + epochTime);
     		disconnect();
     	}
     	catch (Exception e) {  
